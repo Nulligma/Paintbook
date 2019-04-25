@@ -524,7 +524,7 @@
 			
 				urlHolder.addChild(sp);
 				
-				var req:URLRequest = new URLRequest(proxyUrl+url);
+				var req:URLRequest = new URLRequest(url);
 				urlLoader = new Loader();
 				urlLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaded);
 				urlLoader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, progressHandler);

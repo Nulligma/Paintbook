@@ -1,4 +1,4 @@
-package tools.line 
+﻿package tools.line 
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -96,7 +96,8 @@ package tools.line
 			}
 			else
 			{
-				tempSprite.graphics.curveTo(_canvas.mouseX, _canvas.mouseY,endPoint.x, endPoint.y);
+				if(endPoint)
+					tempSprite.graphics.curveTo(_canvas.mouseX, _canvas.mouseY,endPoint.x, endPoint.y);
 			}
 		}
 		

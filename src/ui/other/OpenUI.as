@@ -97,6 +97,8 @@
 		
 		private var sm:SaveMessage;
 		
+		private var buttonGroup:Sprite;
+		
 		private const NUM_ICONS:int = 6;
 		
 		//TODO: Improve OpenUI
@@ -142,6 +144,9 @@
 			
 			var sp2:Sprite;
 			
+			buttonGroup = new Sprite();
+			addChild(buttonGroup);
+			
 			sp = new Sprite;
 			sp.graphics.lineStyle(sW*0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
 			sp.graphics.drawRect(-sH * 0.0417,-sH * 0.0417,sH * 0.083, sH * 0.083); sp.graphics.endFill();
@@ -153,7 +158,7 @@
 			sp.addChild(sp2);
 			sp.x = sW * 0.01 + sp.width/2;
 			sp.y = sH * 0.01667 + sp.height / 2;
-			addChild(sp);
+			buttonGroup.addChild(sp);
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
 			sp.addEventListener(MouseEvent.MOUSE_UP, saveToRack);
 			
@@ -168,14 +173,29 @@
 			sp.addChild(sp2);
 			sp.x = (sp.width*1.5) + sW * 0.02;
 			sp.y = sH * 0.01667 + sp.height / 2;
-			addChild(sp);
+			buttonGroup.addChild(sp);
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
 			sp.addEventListener(MouseEvent.MOUSE_UP, openFromRack);
 			
 			sp = new Sprite;
 			sp.graphics.lineStyle(sW*0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
 			sp.graphics.drawRect(-sH * 0.0417,-sH * 0.0417,sH * 0.083, sH * 0.083); sp.graphics.endFill();
-			sp2 = new RedditIcon;
+			sp2 = new newBox;
+			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
+			cT = new ColorTransform;
+			cT.color = CustomUI.color1;
+			sp2.transform.colorTransform = cT;
+			sp.addChild(sp2);
+			sp.x = (sp.width*2.5) + sW * 0.03;
+			sp.y = sH * 0.01667 + sp.height / 2;
+			buttonGroup.addChild(sp);
+			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
+			sp.addEventListener(MouseEvent.MOUSE_UP, newRack);
+			
+			/*sp = new Sprite;
+			sp.graphics.lineStyle(sW*0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
+			sp.graphics.drawRect(-sH * 0.0417,-sH * 0.0417,sH * 0.083, sH * 0.083); sp.graphics.endFill();
+			sp2 = new HelpIcon;
 			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
 			cT = new ColorTransform;
 			cT.color = CustomUI.color1;
@@ -185,8 +205,7 @@
 			sp.y = sH * 0.01667 + sp.height / 2;
 			addChild(sp);
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
-			sp.addEventListener(MouseEvent.MOUSE_UP, gotoReddit);
-			
+			sp.addEventListener(MouseEvent.MOUSE_UP, onSettings);*/
 			
 			sp = new Sprite;
 			sp.graphics.lineStyle(sW*0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
@@ -199,7 +218,7 @@
 			sp.addChild(sp2);
 			sp.x = sW - sp.width/2 - sW * 0.01;
 			sp.y = sH * 0.01667 + sp.height / 2;
-			addChild(sp);
+			buttonGroup.addChild(sp);
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
 			sp.addEventListener(MouseEvent.MOUSE_UP, onSettings);
 			
@@ -214,7 +233,7 @@
 			sp.addChild(sp2);
 			sp.x = sW * 0.5 - sp.width / 2 - sW * 0.0195;
 			sp.y = sH -  sH * 0.033 - sp.height / 2;
-			addChild(sp);
+			buttonGroup.addChild(sp);
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
 			sp.addEventListener(MouseEvent.MOUSE_UP, onNewCanvas);
 			
@@ -229,7 +248,7 @@
 			deleteBtn.addChild(sp2);
 			deleteBtn.x = sW * 0.5 + deleteBtn.width / 2 + sW * 0.0195;
 			deleteBtn.y = sH -  sH * 0.033 - deleteBtn.height / 2;
-			addChild(deleteBtn);
+			buttonGroup.addChild(deleteBtn);
 			if (lastIndex < 0)
 			{
 				deleteBtn.alpha = 0.5;
@@ -249,6 +268,7 @@
 			}
 			currentCanvasSP = spriteList[0] as Sprite;
 			byteArray = null;
+			
 			
 			stage.addEventListener(MouseEvent.MOUSE_UP, stagePress);
 		}
@@ -276,6 +296,32 @@
 			BackBoard.instance.restartApp();
 		}*/
 		
+		private function newRack(e:MouseEvent):void
+		{
+			var head:String = "New Canvas Rack!";
+			var msg:String = "Are you sure you want to create a new rack and delete all current canvases?\nCanvases that are not saved in .rack file will be lost";
+			deleteWarning = new Warning(Warning.UNSTOPPABLE, confirmNewRack, head, msg);
+			addChild(deleteWarning);
+		}
+		
+		private function confirmNewRack():void
+		{
+			if(deleteWarning.status == 0)
+				tween = new TweenNano(deleteWarning, 0.5, { y: -deleteWarning.height, ease:Linear.easeIn, onComplete:function():void { removeChild(deleteWarning); } } );
+			else
+			{
+				var so:SharedObject = SharedObject.getLocal("SavedCanvas", "/");
+				so.clear();
+				
+				var canvasList:Array = new Array();
+				System.loadCanvasList(canvasList);
+				
+				redrawCanvasList();
+				
+				tween = new TweenNano(deleteWarning, 0.5, { y: -deleteWarning.height, ease:Linear.easeIn, onComplete:function():void { removeChild(deleteWarning); } } );
+			}
+		}
+		
 		private function openFromRack(e:MouseEvent):void 
 		{
 			//loadCanvases = new FileReference();
@@ -295,7 +341,6 @@
 			openBtnsHolder.graphics.beginFill(CustomUI.backColor); 
 			openBtnsHolder.graphics.drawRect(0, 0, sW, sH);
 			openBtnsHolder.graphics.endFill();
-			
 			
 			var txtFormat:TextFormat = new TextFormat;
 			txtFormat.font = CustomUI.font;
@@ -410,6 +455,7 @@
 			
 			System.loadCanvasList(canvasList);
 			redrawCanvasList();
+			
 		}
 		
 		private function saveToRack(e:MouseEvent):void 
@@ -855,7 +901,7 @@
 			if (selectedIndex - 1 >= 0)
 				setChildIndex(currentCanvasSP, getChildIndex(spriteList[selectedIndex - 1]) + 1);
 			else
-				setChildIndex(currentCanvasSP, 4);
+				setChildIndex(currentCanvasSP, getChildIndex(buttonGroup)+1);
 		}
 		
 		public function redraw():void
@@ -870,10 +916,9 @@
 			graphics.endFill();
 			
 			var child:*;
-			
-			for (var i:int = 0; i <= 5; i++) 
+			for (var i:int = 0; i < buttonGroup.numChildren; i++) 
 			{
-				child = getChildAt(i);
+				child = buttonGroup.getChildAt(i);
 				child.graphics.lineStyle(sW*0.001, CustomUI.color1); child.graphics.beginFill(CustomUI.color2); 
 				child.graphics.drawRect( -sH * 0.0417, -sH * 0.0417, sH * 0.083, sH * 0.083); child.graphics.endFill();
 				child = child.getChildAt(0);
@@ -908,6 +953,7 @@
 					new TweenNano(canvas, 0.5, { alpha: 0, ease:Linear.easeIn, onComplete:function():void { removeChild(spriteList.pop()); addLoadedCanvases(); } } );
 				}
 			}
+			
 		}
 		
 		private function addLoadedCanvases()
@@ -925,13 +971,23 @@
 			
 			currentCanvasSP = spriteList[0] as Sprite;
 			byteArray = null;
+			
+			if (spriteList.length == 0)
+			{
+				deleteBtn.alpha = 0.5;
+				deleteBtn.removeEventListener(MouseEvent.CLICK, createDeleteMsg);
+			}
+			else if (deleteBtn.alpha != 1)
+			{
+				deleteBtn.alpha = 1;
+				deleteBtn.addEventListener(MouseEvent.CLICK, createDeleteMsg);
+			}
 		}
 		
 		static public function get instance():OpenUI 
 		{
 			return _instance;
 		}
-		
 	}
 
 }

@@ -16,6 +16,8 @@
 	import tools.ToolManager;
 	import tools.ToolType;
 	import tools.transform.FreeTransform;
+	import flash.events.FocusEvent;
+
 	/**
 	 * ...
 	 * @author GrafixGames
@@ -76,13 +78,15 @@
 			
 			textSprite.filters = [new BlurFilter(text.smoothness, text.smoothness, 2)];
 			
-			txtField = new TextField;txtField.embedFonts = true;
+			txtField = new TextField;//txtField.embedFonts = true;
 			txtField.defaultTextFormat = txtFormat;
 			txtField.alpha = text.opacity;
 			txtField.type = TextFieldType.INPUT;
 			txtField.multiline = true;
 			//TODO:ReqKewBoard
-			//txtField.requestSoftKeyboard();
+			txtField.needsSoftKeyboard = true;
+			txtField.addEventListener(FocusEvent.FOCUS_IN, function(e:FocusEvent):void { txtField.requestSoftKeyboard(); } );
+			
 			txtField.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void { txtField.autoSize = text.autoSize; } );
 			
 			firstX = _canvas.mouseX;

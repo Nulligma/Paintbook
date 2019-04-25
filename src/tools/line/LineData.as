@@ -1,4 +1,4 @@
-package tools.line 
+﻿package tools.line 
 {
 	import flash.display.CapsStyle;
 	/**
@@ -37,7 +37,7 @@ package tools.line
 			_snapY = false;
 			_lineTrail = false;
 			
-			_lineMode = true;
+			_lineMode = false;
 		}
 		
 		public function get size():int 

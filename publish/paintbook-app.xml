@@ -18,8 +18,8 @@
 -->
 <application xmlns="http://ns.adobe.com/air/application/32.0">
   <id>com.nulligma.paintbook</id>
-  <versionNumber>0.0.2</versionNumber>
-  <versionLabel></versionLabel>
+  <versionNumber>0.1</versionNumber>
+  <versionLabel/>
   <filename>paintbook</filename>
   <description/>
   <name>paintbook</name>
@@ -34,6 +34,18 @@
     <renderMode>cpu</renderMode>
     <autoOrients>false</autoOrients></initialWindow>
   <icon>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <image36x36>icons/36.png</image36x36>
     <image48x48>icons/48.png</image48x48>
     <image72x72>icons/72.png</image72x72>

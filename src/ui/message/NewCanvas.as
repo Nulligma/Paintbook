@@ -223,8 +223,8 @@
 			sp.x = -sp.width;
 			sp.y = sH * 0.583;
 			tween = new TweenNano(sp, 1, { x: sW * 0.0488, ease:Strong.easeOut } );
-			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; } );
-			sp.addEventListener(MouseEvent.CLICK, makeImage);
+			//sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; } );
+			//sp.addEventListener(MouseEvent.CLICK, makeImage);
 			
 			sp = new Sprite;
 			sp.name = "Width";

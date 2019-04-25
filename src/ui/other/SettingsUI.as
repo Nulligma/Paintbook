@@ -47,6 +47,7 @@
 		private var warning:Warning;
 		
 		private var supportHolder:Sprite;
+		private var tutorialHolder:Sprite;
 		
 		private var currentPressed:Sprite;
 		private var loadFile:FileReference;
@@ -81,7 +82,7 @@
 			textField = new TextField;textField.embedFonts = true;
 			txtFormat.size = sH * 0.083;
 			textField.defaultTextFormat = txtFormat;
-			textField.text = "Settings";
+			textField.text = "Options";
 			textField.selectable = false;
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			textField.x = -textField.width;
@@ -146,12 +147,12 @@
 			sp.addEventListener(MouseEvent.CLICK, addPref);
 			tween = new TweenNano(sp, 0.9, { x: sW * 0.1, ease:Strong.easeOut } );
 			
-			/*sp = new Sprite;
+			sp = new Sprite;
 			sp.graphics.beginFill(CustomUI.color1); 
 			sp.graphics.drawRect(0, 0, sW * 0.244, sH * 0.1); sp.graphics.endFill();
 			txtFormat.color = CustomUI.color2;
 			txtFormat.size = sH * 0.083 * 0.6;
-			textField = new TextField;
+			textField = new TextField;textField.embedFonts = true;
 			textField.defaultTextFormat = txtFormat;
 			textField.text = "Support";
 			textField.selectable = false;
@@ -163,9 +164,33 @@
 			sp.y = sH*0.525;
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite; } );
 			sp.addEventListener(MouseEvent.CLICK, addSupportHolder);
-			tween = new TweenNano(sp, 1, { x: sW * 0.1, ease:Strong.easeOut } );*/
+			tween = new TweenNano(sp, 1, { x: sW * 0.1, ease:Strong.easeOut } );
+			
+			sp = new Sprite;
+			sp.graphics.beginFill(CustomUI.color1); 
+			sp.graphics.drawRect(0, 0, sW * 0.244, sH * 0.1); sp.graphics.endFill();
+			txtFormat.color = CustomUI.color2;
+			txtFormat.size = sH * 0.083 * 0.6;
+			textField = new TextField;textField.embedFonts = true;
+			textField.defaultTextFormat = txtFormat;
+			textField.text = "Tutorial";
+			textField.selectable = false;
+			textField.autoSize = TextFieldAutoSize.CENTER;
+			textField.x = sp.width / 2 - textField.width / 2; textField.y = sp.height / 2 - textField.height / 2;
+			sp.addChild(textField);
+			addChild(sp);
+			sp.x = -sp.width;
+			sp.y = sH*0.6417;
+			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite; } );
+			sp.addEventListener(MouseEvent.CLICK, addTutorialHolder);
+			tween = new TweenNano(sp, 1.1, { x: sW * 0.1, ease:Strong.easeOut } );
 			
 			stage.addEventListener(MouseEvent.MOUSE_UP, stagePress);
+		}
+		
+		private function gotoTutorial(e:MouseEvent):void
+		{
+			navigateToURL(new URLRequest("https://www.youtube.com"), "_blank");
 		}
 		
 		private function stagePress(e:MouseEvent):void 
@@ -545,7 +570,7 @@
 			
 			var sp:Sprite; var textField:TextField; var sp2:Sprite; var cT:ColorTransform;
 			
-			for (var i:int = 0; i < 3; i++) 
+			for (var i:int = 0; i < 4; i++) 
 			{
 				sp = new Sprite;
 				sp.graphics.beginFill(CustomUI.color2); 
@@ -557,10 +582,15 @@
 				
 				if (i == 0)
 				{
-					textField.text = sp.name = "Mail";
-					sp2 = new MailIcon;
+					textField.text = sp.name = "Official_Forums";
+					sp2 = new HelpIcon;
 				}
 				else if (i == 1)
+				{
+					textField.text = sp.name = "Reddit";
+					sp2 = new RedditIcon;
+				}
+				else if (i == 2)
 				{
 					textField.text = sp.name = "Facebook";
 					sp2 = new FbIcon;
@@ -600,7 +630,12 @@
 			e.currentTarget.scaleX = e.currentTarget.scaleY = 1;
 			var req:URLRequest;
 			
-			if (e.currentTarget.name == "Facebook")
+			if (e.currentTarget.name == "Official_Forums")
+			{
+				req = new URLRequest("http://forums.nulligma.com/viewforum.php?f=1"); 
+				navigateToURL(req, "_blank");
+			}
+			else if (e.currentTarget.name == "Facebook")
 			{
 				req = new URLRequest("http://www.facebook.com/Nulligma"); 
 				navigateToURL(req, "_blank");
@@ -610,9 +645,101 @@
 				req = new URLRequest("https://twitter.com/Nulligma"); 
 				navigateToURL(req, "_blank");
 			}
-			else if (e.currentTarget.name == "Mail")
+			else if (e.currentTarget.name == "Reddit")
 			{
-				req = new URLRequest("mailto:admin@nulligma.com"); 
+				req = new URLRequest("https://www.reddit.com/r/paintbook/"); 
+				navigateToURL(req, "_blank");
+			}
+		}
+				
+		private function addTutorialHolder(e:MouseEvent):void 
+		{
+			e.currentTarget.scaleX = e.currentTarget.scaleY = 1;
+			
+			if (tutorialHolder) return;
+			
+			removeSubMenu();
+			
+			tutorialHolder = new Sprite;
+			
+			tutorialHolder.graphics.beginFill(CustomUI.color1);
+			tutorialHolder.graphics.drawRect(0, 0, sW * 0.5, sH);
+			tutorialHolder.graphics.endFill();
+			
+			var sp:Sprite; var textField:TextField; var sp2:Sprite; var cT:ColorTransform;var textField2:TextField;
+			
+			for (var i:int = 0; i < 2; i++) 
+			{
+				sp = new Sprite;
+				sp.graphics.beginFill(CustomUI.color2); 
+				sp.graphics.drawRect(0, 0, sW * 0.4297, sH * 0.083); sp.graphics.endFill();
+				txtFormat.color = CustomUI.color1;
+				txtFormat.size = sH * 0.083 * 0.6;
+				textField = new TextField;textField.embedFonts = true;
+				textField.defaultTextFormat = txtFormat;
+				
+				
+				txtFormat.color = CustomUI.color2;
+				txtFormat.size = sH * 0.083 * 0.4;
+				textField2 = new TextField;textField2.embedFonts = true;
+				textField2.defaultTextFormat = txtFormat;
+				
+				if (i == 0)
+				{
+					textField.text = sp.name = "Forums";
+					textField2.text = "Submit your tutorials to help the art community.";
+					sp2 = new HelpIcon;
+				}
+				else if (i == 1)
+				{
+					textField.text = sp.name = "Youtube";
+					textField2.text = "I am creating/uploading tutorials.Subscribe here.";
+					sp2 = new YoutubeIcon;
+				}
+				
+				textField.selectable = false;
+				textField.autoSize = TextFieldAutoSize.CENTER;
+				textField.x = sW*0.029; textField.y = sp.height / 2 - textField.height / 2;
+				sp.addChild(textField);
+				
+				sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
+				cT = new ColorTransform;
+				cT.color = CustomUI.color1;
+				sp2.transform.colorTransform = cT;
+				sp2.x = sp.width - sp2.width / 2 - sW * 0.01;
+				sp2.y = sp.height / 2;
+				sp.addChild(sp2);
+				sp.x = sW * 0.0488;
+				sp.y = sH * 0.0667 + i*(sp.height + sH * 0.083 * 5);
+				sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; } );
+				sp.addEventListener(MouseEvent.CLICK, goToLink2);
+				tutorialHolder.addChild(sp);
+				
+				textField2.selectable = false;
+				textField2.autoSize = TextFieldAutoSize.CENTER;
+				textField2.x = sp.x + sW*0.029; textField2.y = sp.y + sp.height + textField2.height / 2;
+				tutorialHolder.addChild(textField2);
+			}
+			
+			tutorialHolder.x = sW * 0.5 + tutorialHolder.width * 0.5;
+			
+			addChild(tutorialHolder);
+			new TweenNano(tutorialHolder, 1, { x: sW * 0.5, ease:Strong.easeOut } );
+		}
+		
+		private function goToLink2(e:MouseEvent):void 
+		{
+			e.currentTarget.scaleX = e.currentTarget.scaleY = 1;
+			var req:URLRequest;
+			
+			if (e.currentTarget.name == "Youtube")
+			{
+				req = new URLRequest("https://www.youtube.com/channel/UCn928rnKyfeW2YaHXIGvx6A"); 
+				navigateToURL(req, "_blank");
+			}
+			else if (e.currentTarget.name == "Forums")
+			{
+				req = new URLRequest("http://forums.nulligma.com/viewforum.php?f=2"); 
 				navigateToURL(req, "_blank");
 			}
 		}
@@ -624,6 +751,10 @@
 			if (supportHolder && supportHolder.stage)
 			{
 				tween = new TweenNano(supportHolder, 0.5, { x: sW * 0.5 + supportHolder.width * 0.5, ease:Linear.easeNone, onComplete:function():void { removeChild(supportHolder); supportHolder = null; } } );
+			}
+			if (tutorialHolder && tutorialHolder.stage)
+			{
+				tween = new TweenNano(tutorialHolder, 0.5, { x: sW * 0.5 + tutorialHolder.width * 0.5, ease:Linear.easeNone, onComplete:function():void { removeChild(tutorialHolder); tutorialHolder = null; } } );
 			}
 			if (prefHolder && prefHolder.stage)
 			{
