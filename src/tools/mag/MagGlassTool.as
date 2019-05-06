@@ -1,4 +1,4 @@
-package tools.mag 
+﻿package tools.mag 
 {
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -34,7 +34,7 @@ package tools.mag
 			_canvas.stage.addEventListener(MouseEvent.MOUSE_UP, onUp,false,-2);
 			
 			magGlass = new MagGlass;
-			System.canvas.stage.addChild(magGlass);
+			BackBoard.instance.addChild(magGlass);
 		}
 		
 		private function onDown(e:MouseEvent):void 
@@ -70,7 +70,7 @@ package tools.mag
 		{
 			if (magGlass.stage)
 			{
-				_canvas.stage.removeChild(magGlass);
+				BackBoard.instance.removeChild(magGlass);
 				magGlass = null;
 			}
 			

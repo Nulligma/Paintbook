@@ -14,6 +14,7 @@
 	import settings.CustomUI;
 	import settings.Prefrences;
 	import settings.System;
+	import flash.geom.ColorTransform;
 
 	/**
 	 * ...
@@ -55,47 +56,50 @@
 			var sp:Sprite;
 			var typeTxt:TextField;
 			
-			txtFormat = new TextFormat;
-			txtFormat.font = CustomUI.font;
-			txtFormat.size = sH * 0.083 * 0.6;
+			var sp2:Sprite;
+			var cT:ColorTransform;
 			
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, tweenOut );
+			//stage.addEventListener(MouseEvent.MOUSE_DOWN,tweenOut);
+			BackBoard.instance.canvasHolder.addEventListener(MouseEvent.MOUSE_DOWN, updateMenus);
+			BackBoard.instance.canvasHolder.addEventListener(MouseEvent.CLICK, updateMenus);
 			
 			drawerLine = new Sprite;
 			drawerLine.graphics.lineStyle(sW * 0.01, CustomUI.color1); 
-			drawerLine.graphics.moveTo(0, sH * 0.083); drawerLine.graphics.lineTo(sW, sH * 0.083);
-			drawerLine.y = -sH * 0.083;
+			drawerLine.graphics.moveTo(sW * 0.08,0); drawerLine.graphics.lineTo(sW*0.08, sH);
+			drawerLine.x = -sW * 0.08;
 			addChild(drawerLine);
 			
 			holder = new Sprite;
+			
+			cT = new ColorTransform;
+			cT.color = CustomUI.color2;
 			
 			for (var i:int = 0; i < 6; i++)
 			{
 				sp = new Sprite;
 				sp.graphics.lineStyle(sW*0.0034,CustomUI.color2); sp.graphics.beginFill(CustomUI.color1); 
-				sp.graphics.drawRect(0, 0, sW/6, sH * 0.083); sp.graphics.endFill();
-				txtFormat.color = CustomUI.color2;
-				typeTxt = new TextField;typeTxt.embedFonts = true;
-				typeTxt.defaultTextFormat = txtFormat;
+				sp.graphics.drawRect(0, 0, sW*0.08, sH/6); sp.graphics.endFill();
 				
-				if (i == 0) { typeTxt.text = "Canvas"; sp.addEventListener(MouseEvent.CLICK, createFileMenu); }
-				if (i == 1) { typeTxt.text = "Layers"; sp.addEventListener(MouseEvent.CLICK, createLayerMenu); }
-				if (i == 2) { typeTxt.text = "Tools"; sp.addEventListener(MouseEvent.CLICK, createToolsMenu); }
-				if (i == 3) { typeTxt.text = "Colors"; sp.addEventListener(MouseEvent.CLICK, createColorMenu); }
-				if (i == 4) { typeTxt.text = "Undo"; sp.addEventListener(MouseEvent.MOUSE_DOWN, performUndo); }
-				if (i == 5) { typeTxt.text = "Redo"; sp.addEventListener(MouseEvent.MOUSE_DOWN, performRedo); }
+				if (i == 0) { sp2 = new FileIcon; sp.addEventListener(MouseEvent.CLICK, createFileMenu); }
+				if (i == 1) { sp2 = new LayerIcon; sp.addEventListener(MouseEvent.CLICK, createLayerMenu); }
+				if (i == 2) { sp2 = new ToolsIcon; sp.addEventListener(MouseEvent.CLICK, createToolsMenu); }
+				if (i == 3) { sp2 = new PanZoomIcon; sp.addEventListener(MouseEvent.CLICK, createColorMenu); }
+				if (i == 4) { sp2 = new UndoIcon; sp.addEventListener(MouseEvent.MOUSE_DOWN, performUndo); }
+				if (i == 5) { sp2 = new RedoIcon; sp.addEventListener(MouseEvent.MOUSE_DOWN, performRedo); }
 				
-				typeTxt.selectable = false;
-				typeTxt.autoSize = TextFieldAutoSize.CENTER;
-				typeTxt.x = sp.width / 2 - typeTxt.width / 2; typeTxt.y = sp.height / 2 - typeTxt.height / 2;
-				sp.addChild(typeTxt);
-				sp.x = i*sW/6; sp.y = 0;
+				sp2.width = sp2.height = (sW * 0.08 / 1.5);
+				sp2.transform.colorTransform = cT;
+				sp2.x = sp.width / 2;
+				sp2.y = sp.height / 2;
+				sp.addChild(sp2);
+			
+				sp.x = 0; sp.y = i*sH/6;
 				holder.addChild(sp);
 			}
 			holder.y = -holder.height;
 			addChild(holder);
 			var dropShadow:DropShadowFilter = new DropShadowFilter;
-			dropShadow.angle = 90; dropShadow.quality = 3; dropShadow.strength = 0.5;
+			dropShadow.angle = 0; dropShadow.quality = 3; dropShadow.strength = 0.5;
 			dropShadow.distance = 7;
 			holder.filters = [dropShadow];
 			
@@ -109,7 +113,7 @@
 		
 		private function createFileMenu(e:MouseEvent):void 
 		{
-			if (activeSubMenu)
+			/*if (activeSubMenu)
 			{
 				TweenNano.to(activeSubMenu, 1, { y:-activeSubMenu.height, ease:Strong.easeOut } );
 				if (activeSubMenu == fileSubMenu && activeSubMenu.y >= sH * 0.08) return;
@@ -126,15 +130,22 @@
 			
 			TweenNano.to(fileSubMenu, 0.5, { y:sH * 0.082, ease:Strong.easeOut } );
 			
-			activeSubMenu = fileSubMenu;
+			activeSubMenu = fileSubMenu;*/
+			
+			fileSubMenu = new FileSubmenu;
+			fileSubMenu.x=0;fileSubMenu.y=0;
+			fileSubMenu.addEventListener(Event.COMPLETE,function(e:Event):void{
+				removeChild(fileSubMenu);
+			});
+			addChild(fileSubMenu);
 		}
 		
 		private function createToolsMenu(e:MouseEvent):void 
 		{
-			if (activeSubMenu) 
+			if (toolSubMenu && toolSubMenu.x>=0) 
 			{
-				TweenNano.to(activeSubMenu, 1, { y:-activeSubMenu.height, ease:Strong.easeOut} );
-				if (activeSubMenu == toolSubMenu && activeSubMenu.y >= sH * 0.08) return;
+				TweenNano.to(toolSubMenu, 1, { x:-toolSubMenu.width, ease:Strong.easeOut} ); return;
+				//if (activeSubMenu == toolSubMenu && activeSubMenu.x >= sW * 0.08) return;
 			}
 			
 			if (toolSubMenu==null)
@@ -143,37 +154,36 @@
 				addChild(toolSubMenu);
 				swapChildren(toolSubMenu, holder);
 			}
-			else if(activeSubMenu)
-				swapChildren(toolSubMenu, activeSubMenu);
+			//else if(activeSubMenu)
+				//swapChildren(toolSubMenu, activeSubMenu);
 			
-			TweenNano.to(toolSubMenu, 0.5, { y:sH * 0.082, ease:Strong.easeOut } );
+			TweenNano.to(toolSubMenu, 0.5, { x:sW * 0.08, ease:Strong.easeOut } );
 			
-			activeSubMenu = toolSubMenu;
+			//activeSubMenu = toolSubMenu;
 		}
 		
 		private function createLayerMenu(e:MouseEvent):void 
 		{
-			if (activeSubMenu) 
+			if (layerSubMenu && layerSubMenu.y>=0) 
 			{
-				TweenNano.to(activeSubMenu, 1, { y:-activeSubMenu.height, ease:Strong.easeOut} );
-				if (activeSubMenu == layerSubMenu && activeSubMenu.y >= sH * 0.08) return;
+				TweenNano.to(layerSubMenu, 1, { y:-layerSubMenu.height, ease:Strong.easeOut} );return;
+				//if (activeSubMenu == layerSubMenu && activeSubMenu.y >= sH * 0.08) return;
 			}
 			
 			if (layerSubMenu==null)
 			{
 				layerSubMenu = new LayerSubmenu();
+				layerSubMenu.x = sW*0.6;
+				layerSubMenu.y = -layerSubMenu.height;
 				addChild(layerSubMenu);
-				swapChildren(layerSubMenu, holder);
+				//swapChildren(layerSubMenu, holder);
 			}
-			else if (activeSubMenu)
+			else
 			{
-				swapChildren(layerSubMenu, activeSubMenu);
 				layerSubMenu.update();
 			}
 			
-			TweenNano.to(layerSubMenu, 0.5, { y:sH * 0.082, ease:Strong.easeOut } );
-			
-			activeSubMenu = layerSubMenu;
+			TweenNano.to(layerSubMenu, 0.5, { y:0, ease:Strong.easeOut } );
 		}
 		
 		private function createColorMenu(e:MouseEvent):void 
@@ -202,7 +212,7 @@
 		{
 			HistoryManager.undo();
 			
-			if (activeSubMenu && activeSubMenu == layerSubMenu)
+			if (layerSubMenu && layerSubMenu.y>=0)
 				layerSubMenu.update();
 		}
 		
@@ -210,13 +220,13 @@
 		{
 			HistoryManager.redo();
 			
-			if (activeSubMenu && activeSubMenu == layerSubMenu)
+			if (layerSubMenu && layerSubMenu.y>=0)
 				layerSubMenu.update();
 		}
 		
 		private function tweenOut(e:MouseEvent = null):void
 		{
-			if (activeSubMenu is ToolSubmenu && mouseY < sH * 0.6) return
+			/*if (activeSubMenu is ToolSubmenu && mouseY < sH * 0.6) return
 			else if (mouseY < sH * 0.3) return;
 			
 			if (!Prefrences.hideMenu && activeSubMenu && mouseY > sH * 0.167)
@@ -232,7 +242,7 @@
 				removeAllSubmenu();
 				TweenNano.to(holder, 0.5, { y: -sH * 0.086, ease:Strong.easeOut } );
 				TweenNano.to(drawerLine, 0.5, { y:-sH*0.086, ease:Strong.easeOut} );
-			}
+			}*/
 		}
 		
 		private function tweenIn(event:MouseEvent = null):void
@@ -264,6 +274,18 @@
 			{
 				removeChild(toolSubMenu);
 				toolSubMenu = null;
+			}
+		}
+		
+		private function updateMenus(event:MouseEvent):void
+		{
+			if (activeSubMenu is ColorSubmenu)
+			{
+				colorSubMenu.updateColorArray();
+			}
+			else if(toolSubMenu && toolSubMenu.x>=0)
+			{
+				toolSubMenu.update(event.type);
 			}
 		}
 		

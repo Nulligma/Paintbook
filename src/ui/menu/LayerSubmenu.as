@@ -72,20 +72,31 @@
 			indicator.graphics.beginFill(CustomUI.color2);
 			indicator.graphics.drawRect(0, 0, sW * 0.146, sH * 0.0167);
 			//indicator.x = sW * 0.146 - sH * 0.034;
-			indicator.y = sH * 0.207 - indicator.height;
+			indicator.y = sH * 0.1 - indicator.height;
 			
 			layerHolder = new Sprite;
 			//layerHolder.graphics.beginFill(CustomUI.color2); 
 			//layerHolder.graphics.drawRect(0, 0, sW * 0.8, sH * 0.207); layerHolder.graphics.endFill();
 			generateLayers();
 			addChild(layerHolder);
-			layerHolder.x = sW * 0.1 * 3;
-			layerHolder.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void {if(layerHolder.width>sW*0.801 && !pressedForSec) layerHolder.startDrag(false, new Rectangle(sW-layerHolder.width-sW*0.1, 0, layerHolder.width -sW*0.7+sW*0.1, 0)); } );
+			//layerHolder.x = sW * 0.1 * 3;
+			layerHolder.y = sH*0.1;
+			layerHolder.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void {if(layerHolder.width>sW*0.4 && !pressedForSec) layerHolder.startDrag(false, new Rectangle(sW*0.4-layerHolder.width, layerHolder.y, layerHolder.width-sW*0.4, 0)); } );
 			stage.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void { layerHolder.stopDrag()} );
+			
+			
+			var maskSp:Sprite = new Sprite();
+			maskSp.graphics.beginFill(0x000000, 1);
+			maskSp.graphics.drawRect(0, 0, sW * 0.4, sH * 0.1);
+			maskSp.graphics.endFill();
+			maskSp.y = layerHolder.y;
+			this.addChild(maskSp);
+			
+			layerHolder.mask = maskSp;
 			
 			sp1 = new Sprite;
 			sp1.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp1.graphics.beginFill(CustomUI.color2); 
-			sp1.graphics.drawRect(0,0,sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+			sp1.graphics.drawRect(0,0,sW * 0.1, sH * 0.1); sp1.graphics.endFill();
 			sp2 = new SettingsIcon;
 			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
 			cT = new ColorTransform;
@@ -99,7 +110,7 @@
 			
 			sp1 = new Sprite;
 			sp1.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp1.graphics.beginFill(CustomUI.color2);
-			sp1.graphics.drawRect(0,0,sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+			sp1.graphics.drawRect(0,0,sW * 0.1, sH * 0.1); sp1.graphics.endFill();
 			sp2 = new VisibleIcon;
 			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
 			cT = new ColorTransform;
@@ -114,7 +125,7 @@
 			
 			sp1 = new Sprite;
 			sp1.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp1.graphics.beginFill(CustomUI.color2); 
-			sp1.graphics.drawRect(0, 0, sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+			sp1.graphics.drawRect(0, 0, sW * 0.1, sH * 0.1); sp1.graphics.endFill();
 			txtFormat.color = CustomUI.color1;
 			txtFormat.size = sH * 0.083 * 0.6;
 			typeTxt = new TextField;typeTxt.embedFonts = true;
@@ -128,13 +139,13 @@
 			sp1.x = sW * 0.2;
 			sp1.addEventListener(MouseEvent.CLICK, opacityHandler);
 			
-			var dropShadow:DropShadowFilter = new DropShadowFilter;
+			/*var dropShadow:DropShadowFilter = new DropShadowFilter;
 			dropShadow.angle = 0; dropShadow.quality = 3;
-			sp1.filters = [dropShadow];
+			sp1.filters = [dropShadow];*/
 			
 			sp1 = new Sprite;
 			sp1.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp1.graphics.beginFill(CustomUI.color2);
-			sp1.graphics.drawRect(0,0,sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+			sp1.graphics.drawRect(0,0,sW * 0.1, sH * 0.1); sp1.graphics.endFill();
 			sp2 = new PlusIcon;
 			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
 			cT = new ColorTransform;
@@ -144,16 +155,16 @@
 			sp2.y = sp1.height / 2;
 			sp1.addChild(sp2);
 			addChild(sp1);
-			sp1.x = sW - sW * 0.1;
+			sp1.x = sW * 0.3;
 			sp1.addEventListener(MouseEvent.CLICK, newLayerHandler);
 			
-			dropShadow.angle = 180; dropShadow.quality = 3;
-			sp1.filters = [dropShadow];
+			//dropShadow.angle = 180; dropShadow.quality = 3;
+			//sp1.filters = [dropShadow];
 			
-			drawerLine = new Sprite;
+			/*drawerLine = new Sprite;
 			drawerLine.graphics.lineStyle(sW * 0.0025, CustomUI.color1); 
 			drawerLine.graphics.moveTo(0, sH * 0.207); drawerLine.graphics.lineTo(sW, sH * 0.207);
-			addChild(drawerLine);
+			addChild(drawerLine);*/
 		}
 		
 		private function generateLayers():void 
@@ -170,7 +181,7 @@
 			
 			clearLayerHolder();
 			
-			while (h*sf > sH * 0.207 || w*sf > sW * 0.146)
+			while (h*sf > sH * 0.1 || w*sf > sW * 0.146)
 			{
 				sf -= 0.01;
 			}
@@ -239,8 +250,8 @@
 			
 			layerHolder.graphics.clear();
 			layerHolder.graphics.beginFill(CustomUI.color2);
-			var width:Number = layerHolder.width > sW * 0.8?layerHolder.width:sW * 0.8;
-			layerHolder.graphics.drawRect(0, 0, width, sH * 0.207); layerHolder.graphics.endFill();
+			var width:Number = sW*0.4;//layerHolder.width > sW * 0.8?layerHolder.width:sW * 0.8;
+			layerHolder.graphics.drawRect(0, 0, width, sH * 0.1); layerHolder.graphics.endFill();
 			
 			System.updateCanvas();
 		}
@@ -345,7 +356,7 @@
 					sp.graphics.beginFill(layerObject.color); 
 				}
 				
-				sp.graphics.drawRect(0, 0, sW * 0.146, sH * 0.207);
+				sp.graphics.drawRect(0, 0, sW * 0.146, sH * 0.1);
 			}
 			else
 			{

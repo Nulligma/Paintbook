@@ -351,14 +351,14 @@
 		
 		public function get pressureSensivity():Number 
 		{
-			//return _pressureSensivity;
-			return 0;
+			return _pressureSensivity;
+			//return 0;
 		}
 		
 		public function set pressureSensivity(value:Number):void 
 		{
-			//_pressureSensivity = value;
-			_pressureSensivity = 0;
+			_pressureSensivity = value;
+			//_pressureSensivity = 0;
 		}
 		
 		public function get type():String 

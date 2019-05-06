@@ -1,4 +1,4 @@
-package tools.brushes 
+﻿package tools.brushes 
 {
 	import com.greensock.easing.Linear;
 	import com.greensock.easing.Strong;
@@ -56,62 +56,92 @@ package tools.brushes
 			txtFormat = new TextFormat;
 			txtFormat.font = CustomUI.font;
 			
-			var bg:Sprite = new Sprite();
+			/*var bg:Sprite = new Sprite();
 			bg.graphics.beginFill(0x000000, 0);
 			bg.graphics.drawRect(0, 0, sW, sH);
 			addChild(bg);
-			bg.addEventListener(MouseEvent.MOUSE_DOWN, removeMe );
+			bg.addEventListener(MouseEvent.MOUSE_DOWN, removeMe );*/
 			
 			checkBox = new Sprite();
 			checkBox.graphics.beginFill(0x0000FF, 1);
 			checkBox.graphics.drawRect(0, 0, sW * 0.025, sW * 0.025);
 			
 			holder = new Sprite();
-			holder.graphics.lineStyle(sW*0.01, CustomUI.color2);
-			holder.graphics.beginFill(CustomUI.color2, 1);
-			holder.graphics.drawRect(0, 0, sW * 0.40, sH * 0.735);
+			//holder.graphics.lineStyle(sW*0.01, CustomUI.color2);
+			holder.graphics.beginFill(CustomUI.color1, 1);
+			holder.graphics.drawRect(0, 0, sW * 0.2, sH - (sW * 0.2));
 			addChild(holder);
-			holder.x = sW * 0.015;
-			holder.y = sH * 0.1667;
-			holder.alpha = 0.3;
+			//holder.x = sW * 0.4;
+			//holder.y = sW * 0.2;
+			//holder.alpha = 0.3;
 			
 			dummySp = new Sprite();
 			dummySp.graphics.beginFill(0x000000, 0);
-			dummySp.graphics.drawRect(0, 0, sW * 0.40, sH * 0.735);
+			dummySp.graphics.drawRect(0, 0, sW * 0.20, sH - (sW * 0.2));
+			
 			
 			var sp:Sprite = new Sprite();
-			sp.graphics.beginFill(CustomUI.color1); sp.graphics.drawRect(0, 0, sW * 0.342, sH * 0.083); sp.graphics.endFill();
-			txtFormat.size = sp.height * 0.56;
-			txtFormat.color = CustomUI.color2;
-			folderName = new TextField;folderName.embedFonts = true;
-			folderName.defaultTextFormat = txtFormat;
-			folderName.text = String(Preset.currentFolder[0][0]);
-			folderName.selectable = false;
-			folderName.autoSize = TextFieldAutoSize.CENTER;
-			folderName.x = sp.width / 2 - folderName.width / 2; folderName.y = sp.height / 2 - folderName.height / 2;
-			sp.addChild(folderName);
-			sp.x = sW * 0.002; sp.y = sH * 0.0083;
+			sp.graphics.beginFill(CustomUI.color2); sp.graphics.drawRect(0, 0, sW * 0.096, sH * 0.083); sp.graphics.endFill();
+			var sp2:Sprite = new FileIcon;
+			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
+			var cT:ColorTransform = new ColorTransform();
+			cT.color = CustomUI.color1;
+			sp2.transform.colorTransform = cT;
+			sp2.x = sp.width / 2;
+			sp2.y = sp.height / 2;
+			sp.addChild(sp2);
+			sp.x = holder.width - sp.width - sW * 0.002; sp.y = sH * 0.0083;
 			holder.addChild(sp);
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; } );
 			sp.addEventListener(MouseEvent.CLICK, changeFolder );
 			
 			sp = new Sprite;
-			sp.graphics.beginFill(CustomUI.color1); 
+			sp.graphics.beginFill(CustomUI.color2); 
 			sp.graphics.drawRect(0,0,sW * 0.05, sH * 0.083); sp.graphics.endFill();
-			var sp2:Sprite = new SettingsIcon;
+			sp2 = new NotVisibleIcon;
 			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
-			var cT:ColorTransform = new ColorTransform();
-			cT.color = CustomUI.color2;
+			cT = new ColorTransform();
+			cT.color = CustomUI.color1;
 			sp2.transform.colorTransform = cT;
 			sp2.x = sp.width / 2;
 			sp2.y = sp.height / 2;
 			sp.addChild(sp2);
-			sp.x = holder.width - sp.width - sW * 0.01;
+			sp.x = sW * 0.002;
 			sp.y = sH*0.0083;
 			holder.addChild(sp);
-			sp.addEventListener(MouseEvent.CLICK, createToolSetting);
+			sp.addEventListener(MouseEvent.CLICK, hide);
 			
-			TweenLite.to(holder, 0.2, { y:sH * 0.205, alpha:1 , ease:Linear.easeOut,onComplete:loadPreset } );
+			//TweenLite.to(holder, 0.2, { y:(sW * 0.2), alpha:1 , ease:Linear.easeOut,onComplete:loadPreset } );
+			
+			loadPreset();
+		}
+		
+		private function hide(e:MouseEvent):void
+		{
+			removeChild(holder);
+			
+			var sp:Sprite = new Sprite();
+			sp.graphics.beginFill(CustomUI.color2); sp.graphics.drawRect(0, 0, sW * 0.05, sH * 0.083); sp.graphics.endFill();
+			var sp2:Sprite = new VisibleIcon;
+			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
+			var cT:ColorTransform = new ColorTransform();
+			cT.color = CustomUI.color1;
+			sp2.transform.colorTransform = cT;
+			sp2.x = sp.width / 2;
+			sp2.y = sp.height / 2;
+			sp.addChild(sp2);
+			sp.x = sW * 0.002;
+			sp.y = sH*0.0083;
+			this.addChild(sp);
+			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; } );
+			sp.addEventListener(MouseEvent.CLICK, show );
+		}
+		
+		private function show(e:MouseEvent):void
+		{
+			this.removeChildren();
+			
+			this.addChild(holder);
 		}
 		
 		private function loadPreset():void 
@@ -133,7 +163,7 @@ package tools.brushes
 		{
 			if (bmHolder)
 			{
-				holder.removeChildAt(3);
+				holder.removeChildAt(2);
 				var dO:DisplayObject
 				for (var j:int = 0; j < bmHolder.numChildren; j++)
 				{
@@ -155,8 +185,8 @@ package tools.brushes
 				tempSp = new Sprite();
 				tempSp.name = String(i);
 				tempSp.addChild(bm);
-				tempSp.x = (i % 2) * (bm.width + sW * 0.002);
-				tempSp.y = int(i / 2) * (bm.height + sH * 0.0034);
+				tempSp.x = sW*0.005;//(i % 2) * (bm.width + sW * 0.002);
+				tempSp.y = i * (bm.height + sH * 0.0034);
 				tempSp.addEventListener(MouseEvent.CLICK, changeSettings);
 				
 				bmHolder.addChild(tempSp);
@@ -167,7 +197,7 @@ package tools.brushes
 			
 			var maskSp:Sprite = new Sprite();
 			maskSp.graphics.beginFill(0x000000, 1);
-			maskSp.graphics.drawRect(0, 0, sW * 0.402, sH * 0.635);
+			maskSp.graphics.drawRect(0, 0, sW * 0.2, sH * 0.635);
 			maskSp.graphics.endFill();
 			maskSp.y = sH * 0.1;
 			holder.addChild(maskSp);
@@ -175,7 +205,7 @@ package tools.brushes
 			bmHolder.y = sH * 0.1;
 			bmHolder.mask = maskSp;
 			
-			var heightDiff:Number =  bmHolder.height - maskSp.height;
+			var heightDiff:Number =  bmHolder.height - (maskSp.height/1.25);
 			var dragY:Number = bmHolder.y - heightDiff;
 			
 			bmHolder.addEventListener(MouseEvent.MOUSE_DOWN, 
@@ -209,28 +239,95 @@ package tools.brushes
 			if (Preset.folderNames.length == 1)
 				return;
 			
-			customSlider = new CustomSlider("", Preset.folderNames.indexOf(Preset.currentFolder[0][0]), 0, Preset.folderNames.length - 1, Preset.folderNames);
+			var holder:Sprite = new Sprite();
+			holder.graphics.beginFill(CustomUI.backColor); 
+			holder.graphics.drawRect(0, 0, sW, sH);
+			holder.graphics.endFill();
+			
+			var txtFormat:TextFormat = new TextFormat;
+			txtFormat.font = CustomUI.font;
+			txtFormat.color = CustomUI.color1;
+			
+			var textField:TextField = new TextField;textField.embedFonts = true;
+			txtFormat.size = sH * 0.083;
+			textField.defaultTextFormat = txtFormat;
+			textField.text = "Select custom brush folder";
+			textField.selectable = false; 
+			textField.autoSize = TextFieldAutoSize.CENTER;
+			textField.x = sW/2 - textField.width/2;
+			textField.y = 0;
+			holder.addChild(textField);
+			
+			var sp:Sprite = new Sprite;
+			sp.graphics.beginFill(CustomUI.color1); 
+			sp.graphics.drawRect(0, 0, sW * 0.146, sH * 0.083); sp.graphics.endFill();
+			txtFormat.color = CustomUI.color2;
+			txtFormat.size = sH * 0.083 * 0.6;
+			textField = new TextField;textField.embedFonts = true;
+			textField.defaultTextFormat = txtFormat;
+			textField.text = "Cancel";
+			textField.selectable = false;
+			textField.autoSize = TextFieldAutoSize.CENTER;
+			textField.x = sp.width / 2 - textField.width / 2; textField.y = sp.height / 2 - textField.height / 2;
+			sp.addChild(textField);
+			holder.addChild(sp);
+			sp.x = sW/2 - sp.width/2;
+			sp.y = sH - sp.height*2;
+			
+			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; } );
+			sp.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 1; BackBoard.instance.removeChild(holder); } );
+			
+			var folders:Sprite;
+			for(var i:int = 0;i<Preset.folderNames.length;i++)
+			{
+				sp = new Sprite;
+				sp.name = String(i);
+				sp.graphics.beginFill(CustomUI.color1); 
+				sp.graphics.drawRect(0, 0, sW * 0.146, sH * 0.083); sp.graphics.endFill();
+				txtFormat.color = CustomUI.color2;
+				txtFormat.size = sH * 0.083 * 0.6;
+				textField = new TextField;textField.embedFonts = true;
+				textField.defaultTextFormat = txtFormat;
+				textField.text = Preset.folderNames[i];
+				textField.selectable = false;
+				textField.autoSize = TextFieldAutoSize.CENTER;
+				textField.x = sp.width / 2 - textField.width / 2; textField.y = sp.height / 2 - textField.height / 2;
+				sp.addChild(textField);
+				holder.addChild(sp);
+				
+				sp.x = sW; sp.y = ((sH * 0.13) * int(i / 6)) + sH * 0.33;
+				TweenLite.to(sp, 1, { x: ((sW * 0.16) * (i % 6)) + sW * 0.01 , ease:Strong.easeOut } );
+				
+				sp.addEventListener(MouseEvent.CLICK,function(e:MouseEvent):void { 
+					BackBoard.instance.removeChild(holder);
+					terminateNameChange(int((e.currentTarget as Sprite).name));
+					}
+				);
+			}
+			
+			BackBoard.instance.addChild(holder);
+			
+			/*customSlider = new CustomSlider("", Preset.folderNames.indexOf(Preset.currentFolder[0][0]), 0, Preset.folderNames.length - 1, Preset.folderNames);
 			addChild(customSlider);
-			customSlider.addEventListener(MouseEvent.MOUSE_UP, terminateNameChange);
+			customSlider.addEventListener(MouseEvent.MOUSE_UP, terminateNameChange);*/
 		}
 		
-		private function terminateNameChange(e:MouseEvent):void 
+		private function terminateNameChange(index:int):void 
 		{
-			customSlider.removeEventListener(MouseEvent.MOUSE_UP, terminateNameChange);
+			//customSlider.removeEventListener(MouseEvent.MOUSE_UP, terminateNameChange);
 			
-			var index:int = customSlider.value;
+			//var index:int = customSlider.value;
 			
-			folderName.text = Preset.folderNames[index];
+			//folderName.text = Preset.folderNames[index];
 			
 			Preset.setCurrentFolder(index);
 			Preset.currnentBrush = 0;
 			setBrushData(Preset.currentFolder[0]);
 			
-			removeChild(customSlider);
-			customSlider = null;
+			//removeChild(customSlider);
+			//customSlider = null;
 			
 			loadPreset();
-			
 		}
 		
 		private function createToolSetting(e:MouseEvent):void 
@@ -282,7 +379,7 @@ package tools.brushes
 			var bd:BitmapData;
 			for (var i:int = 0; i < folderArray.length; i++)
 			{
-				bd = new BitmapData(sW / 5, sH / 4.8, false, 0xFFFFFF);
+				bd = new BitmapData(sW*0.19, sH / 4.8, false, 0xFFFFFF);
 				
 				setBrushData(folderArray[i]);
 				

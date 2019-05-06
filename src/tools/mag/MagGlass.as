@@ -1,4 +1,4 @@
-package tools.mag 
+﻿package tools.mag 
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -38,27 +38,29 @@ package tools.mag
 			sW = System.stageWidth;
 			sH = System.stageHeight;
 			
-			graphics.lineStyle(2, CustomUI.color2);
+			//graphics.lineStyle(2, CustomUI.color2);
 			graphics.beginFill(CustomUI.color1);
 			graphics.drawRect(0, 0, sW* 0.2, sW * 0.2);
 			graphics.endFill();
 			
-			graphics.lineStyle(0);
+			//graphics.lineStyle(0);
 			graphics.beginFill(0xFFFFFF);
-			graphics.drawRect(sW * 0.02, sW * 0.02, sW * 0.16, sW * 0.16);
+			graphics.drawRect(sW * 0.01, sW * 0.01, sW * 0.18, sW * 0.18);
 			graphics.endFill();
 			
-			var bd:BitmapData = new BitmapData(sW * 0.08, sW * 0.08,true,0x000000);
+			_size = sW * 0.09;
+			halfSize = _size * 0.5;
+			
+			var bd:BitmapData = new BitmapData(_size,_size,true,0x000000);
 			
 			bitMap = new Bitmap(bd);
-			bitMap.x = bitMap.y = sW * 0.02;
+			bitMap.x = bitMap.y = (sW*0.1) - _size;
 			bitMap.scaleX = bitMap.scaleY = 2;
 			addChild(bitMap);
 			
-			_size = sW * 0.08;
-			halfSize = _size * 0.5;
+			//prevY = prevY == 0?sH - width:prevY;
 			
-			prevY = prevY == 0?sH - width:prevY;
+			prevX = sW*0.4;
 			
 			x = prevX;
 			y = prevY;
@@ -69,7 +71,7 @@ package tools.mag
 		private function drag(e:MouseEvent):void 
 		{
 			stage.addEventListener(MouseEvent.MOUSE_UP, endDrag);
-			startDrag(false, new Rectangle(0, sH * 0.175, System.stageWidth - width, System.stageHeight - height - sH * 0.175));
+			startDrag(false, new Rectangle(sW*0.4,0, System.stageWidth - width-sW*0.4, System.stageHeight - height));
 		}
 		
 		private function endDrag(e:MouseEvent):void 
@@ -83,7 +85,7 @@ package tools.mag
 		
 		public function update(X:Number,Y:Number)
 		{
-			bitMap.bitmapData = new BitmapData(sW * 0.08, sW * 0.08, true, 0x000000);
+			bitMap.bitmapData = new BitmapData(_size, _size, true, 0x000000);
 			
 			X = X > halfSize?X - halfSize:0;
 			Y = Y > halfSize?Y - halfSize:0;

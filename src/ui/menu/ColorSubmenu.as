@@ -28,7 +28,8 @@
 	{
 		private var sH:int;
 		private var sW:int;
-		static private var colorsArray:Array = new Array(0x000000, 0x000000, 0x000000, 0x000000, 0x000000);
+		private var colorsArray:Array = new Array(0x000000, 0x000000, 0x000000, 0x000000, 0x000000);
+		private var colorsSprites:Array;
 		private var spectrum:Bitmap;
 		
 		private var spectrumHolder:Sprite;
@@ -93,6 +94,7 @@
 			spectrumHolder.stage.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void { pressed = false; } );
 			
 			var i:int = 0;
+			colorsSprites = new Array();
 			for each(var color:int in colorsArray)
 			{
 				sp1 = new Sprite;
@@ -104,6 +106,7 @@
 				addChild(sp1);
 				i++;
 				sp1.addEventListener(MouseEvent.CLICK, setColor);
+				colorsSprites.push(sp1);
 			}
 			
 			sp1 = new Sprite;
@@ -155,12 +158,24 @@
 			}
 		}
 		
-		private function updateColorArray():void 
+		public function updateColorArray():void 
 		{
 			if (colorsArray.indexOf(ToolManager.fillColor) == -1)
 			{
 				colorsArray.unshift(ToolManager.fillColor);
 				colorsArray.pop();
+				
+				var sp1:Sprite;
+				for(var i:int = 0; i<colorsSprites.length;i++)
+				{
+					sp1 = colorsSprites[i] as Sprite;
+					sp1.graphics.clear();
+					sp1.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp1.graphics.beginFill(colorsArray[i]); 
+					sp1.graphics.drawRect(0, 0, sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+				}
+				
+				c1Sprite.graphics.beginFill(ToolManager.fillColor); c1Sprite.graphics.drawRect(0, 0, c1Sprite.width, sH * 0.04);
+				c1Sprite.graphics.endFill();
 			}
 		}
 		

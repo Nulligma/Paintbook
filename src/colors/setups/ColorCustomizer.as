@@ -125,8 +125,16 @@
 		
 		private function createGradient():void 
 		{
-			gradient = new Bitmap;
-			gradient.bitmapData = new BitmapData(800, 60, false, 0x000000);
+			if(gradient == null)
+			{
+				gradient = new Bitmap;
+				gradient.bitmapData = new BitmapData(800, 60, false, 0x000000);
+				
+				gradient.scaleX = sW * 0.78 / 800;
+				gradient.scaleY = sH * 0.1 / 60;
+				gradient.x = sW - gradient.width - sW * 0.02;
+				gradient.y = sH * 0.03;
+			}
 			
 			var tempColor:uint;
 			var rgb:Object = ConvertColor.HexToRGB(_newColor);
@@ -149,11 +157,6 @@
 			{
 				gradient.bitmapData.copyPixels(gradient.bitmapData , new Rectangle(0, 0, 800, 1), new Point(0, k));
 			}
-			
-			gradient.scaleX = sW * 0.78 / 800;
-			gradient.scaleY = sH * 0.1 / 60;
-			gradient.x = sW - gradient.width - sW * 0.02;
-			gradient.y = sH * 0.03;
 			
 			update_NewColor_Sprite();
 			

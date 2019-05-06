@@ -25,6 +25,7 @@
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.ui.Mouse;
 
 	/**
 	 * ...
@@ -54,6 +55,10 @@
 			
 			sW = System.stageWidth;
 			sH = System.stageHeight;
+			
+			graphics.beginFill(CustomUI.backColor); 
+			graphics.drawRect(0, 0, sW, sH); 
+			graphics.endFill();
 			
 			var sp:Sprite;
 			var sp2:Sprite;
@@ -106,22 +111,46 @@
 				typeTxt.x = sp.width / 2 - typeTxt.width / 2; typeTxt.y = sp2.y + typeTxt.height;
 				sp.addChild(typeTxt);
 				
-				sp.x = i*sW * 0.1112; sp.y = 0;
+				sp.x = ((sW/5) * int(i%5)) + sp.width/2; 
+				sp.y = (sH/2 * int(i/5)) + sp.height/2;
 				addChild(sp);
 				
 				sp.name = String(i);
 				sp.addEventListener(MouseEvent.MOUSE_DOWN, performAction);
 			}
 			
-			graphics.lineStyle(sW * 0.006, CustomUI.color1); 
-			graphics.moveTo(0, sH * 0.083); graphics.lineTo(sW, sH * 0.083);
+			var textField:TextField;
+			sp = new Sprite;
+			sp.graphics.beginFill(CustomUI.color1); 
+			sp.graphics.drawRect(0, 0, sW * 0.146, sH * 0.083); sp.graphics.endFill();
+			txtFormat.color = CustomUI.color2;
+			txtFormat.size = sH * 0.083 * 0.6;
+			textField = new TextField;textField.embedFonts = true;
+			textField.defaultTextFormat = txtFormat;
+			textField.text = "Cancel";
+			textField.selectable = false;
+			textField.autoSize = TextFieldAutoSize.CENTER;
+			textField.x = sp.width / 2 - textField.width / 2; textField.y = sp.height / 2 - textField.height / 2;
+			sp.addChild(textField);
+			addChild(sp);
+			sp.x = sW/2 - sp.width/2;
+			sp.y = sH - sp.height;
+			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; } );
+			sp.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void
+			{
+				dispatchEvent(new Event(Event.COMPLETE,true));
+			});
+			addChild(sp);
 			
 			_parent = this.parent as Menu;
+			
 		}
 		
 		private function performAction(e:MouseEvent):void 
 		{
 			var type:String = e.currentTarget.name as String;
+			
+			dispatchEvent(new Event(Event.COMPLETE,true));
 			
 			switch(type)
 			{

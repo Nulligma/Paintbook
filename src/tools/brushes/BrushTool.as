@@ -101,7 +101,7 @@
 			oldY = _canvas.mouseY;
 			
 			oldPd = pressureDist = 0.2;// brush.size * 0.25 * 0.085;
-			psCount = (brush.pressureSensivity - 1) * 0.3;
+			psCount = (brush.pressureSensivity)*0.08;
 			
 			initBrushProp();
 			
@@ -176,11 +176,14 @@
 		
 		private function calcPressure(newDrawPoint:Point):void 
 		{
-			pressureDist = Math.sqrt(distanceSquared(newDrawPoint, new Point(oldX, oldY)));
-			pressureDist = pressureDist < 2?2:pressureDist>18?18:pressureDist;
-			pressureDist *= 0.085;
-			pressureDist < 1?pressureDist *= (1 - psCount):pressureDist *= (1 + psCount);
+			//pressureDist = distanceSquared(newDrawPoint, new Point(oldX, oldY));
+			pressureDist = (newDrawPoint.x - oldX) + (newDrawPoint.y - oldY) 
+			pressureDist = pressureDist < 1?1:pressureDist>20?20:pressureDist;
+			pressureDist *= psCount;
+			//pressureDist < 1?pressureDist *= (1 - psCount):pressureDist *= (1 + psCount);
 			pressureDist = oldPd + (pressureDist - oldPd) * easingForPressure;
+			
+			//pressureDist < 0.05?pressureDist=0.05:0;
 			oldPd = pressureDist;
 		}
 		
@@ -384,7 +387,7 @@
 		public function customDown(startPoint:Point):void
 		{
 			oldPd = pressureDist = 0.2;// brush.size * 0.25 * 0.085;
-			psCount = (brush.pressureSensivity-1) * 0.3;
+			psCount = (brush.pressureSensivity)*0.08;
 			
 			initBrushProp();
 			

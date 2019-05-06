@@ -12,6 +12,7 @@
 	public class Spectrum 
 	{
 		static private var _gradLinearSpectrum:ColorSpectrumChart;
+		static private var _smallGradientLinear:ColorSpectrumChart;
 		static private var _radialSpectrum:ColorSpectrumChart;
 		static private var _linearSpectrum:Bitmap;
 		
@@ -24,6 +25,9 @@
 		{
 			_gradLinearSpectrum = new ColorSpectrumChart;
 			_gradLinearSpectrum.gradientLinear(sW * 0.49, sH * 0.67, true);
+			
+			_smallGradientLinear = new ColorSpectrumChart;
+			_smallGradientLinear.gradientLinear(sW * 0.24, sH * 0.4, true);
 			
 			_radialSpectrum = new ColorSpectrumChart;
 			_radialSpectrum.polar(sW * 0.068, sW * 0.068);
@@ -47,6 +51,11 @@
 		static public function get linearSpectrum():Bitmap 
 		{
 			return _linearSpectrum;
+		}
+		
+		static public function get smallGradientLinear():ColorSpectrumChart 
+		{
+			return _smallGradientLinear;
 		}
 		
 		static public function get gradLinearSpectrum():ColorSpectrumChart 

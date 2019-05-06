@@ -1,4 +1,4 @@
-package tools 
+﻿package tools 
 {
 	import flash.display.BitmapData;
 	import flash.display.Sprite;

@@ -1,4 +1,4 @@
-package tools.picker 
+﻿package tools.picker 
 {
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -57,9 +57,8 @@ package tools.picker
 			{
 				_canvas.stage.removeChild(colorBox);
 				ToolManager.fillColor = _bitData.getPixel(_canvas.mouseX, _canvas.mouseY);
-				ToolManager.toggle(ToolType.BRUSH);
+				//ToolManager.toggle(ToolType.BRUSH);
 			}
-			
 			_canvas.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
 		}
 		
