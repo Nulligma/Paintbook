@@ -32,6 +32,11 @@
 		private var colorSubMenu:ColorSubmenu;
 		private var layerSubMenu:LayerSubmenu;
 		private var toolSubMenu:ToolSubmenu;
+		private var panZoomMenu:PanZoom;
+		
+		private var toolBtn:Sprite;
+		private var layerBtn:Sprite;
+		private var panZoomBtn:Sprite;
 		
 		private var holder:Sprite;
 		private var activeSubMenu:Sprite;
@@ -72,18 +77,18 @@
 			holder = new Sprite;
 			
 			cT = new ColorTransform;
-			cT.color = CustomUI.color2;
+			cT.color = CustomUI.color1;
 			
 			for (var i:int = 0; i < 6; i++)
 			{
 				sp = new Sprite;
-				sp.graphics.lineStyle(sW*0.0034,CustomUI.color2); sp.graphics.beginFill(CustomUI.color1); 
+				sp.graphics.lineStyle(sW*0.0034,CustomUI.color2); sp.graphics.beginFill(CustomUI.backColor); 
 				sp.graphics.drawRect(0, 0, sW*0.08, sH/6); sp.graphics.endFill();
 				
 				if (i == 0) { sp2 = new FileIcon; sp.addEventListener(MouseEvent.CLICK, createFileMenu); }
-				if (i == 1) { sp2 = new LayerIcon; sp.addEventListener(MouseEvent.CLICK, createLayerMenu); }
-				if (i == 2) { sp2 = new ToolsIcon; sp.addEventListener(MouseEvent.CLICK, createToolsMenu); }
-				if (i == 3) { sp2 = new PanZoomIcon; sp.addEventListener(MouseEvent.CLICK, createColorMenu); }
+				if (i == 1) { sp2 = new LayerIcon; sp.addEventListener(MouseEvent.CLICK, createLayerMenu); layerBtn=sp; }
+				if (i == 2) { sp2 = new ToolsIcon; sp.addEventListener(MouseEvent.CLICK, createToolsMenu); toolBtn=sp;  }
+				if (i == 3) { sp2 = new PanZoomIcon; sp.addEventListener(MouseEvent.CLICK, createPanZoomMenu); panZoomBtn=sp; }
 				if (i == 4) { sp2 = new UndoIcon; sp.addEventListener(MouseEvent.MOUSE_DOWN, performUndo); }
 				if (i == 5) { sp2 = new RedoIcon; sp.addEventListener(MouseEvent.MOUSE_DOWN, performRedo); }
 				
@@ -144,7 +149,9 @@
 		{
 			if (toolSubMenu && toolSubMenu.x>=0) 
 			{
+				toggleButton(toolBtn,false);
 				TweenNano.to(toolSubMenu, 1, { x:-toolSubMenu.width, ease:Strong.easeOut} ); return;
+				
 				//if (activeSubMenu == toolSubMenu && activeSubMenu.x >= sW * 0.08) return;
 			}
 			
@@ -157,6 +164,7 @@
 			//else if(activeSubMenu)
 				//swapChildren(toolSubMenu, activeSubMenu);
 			
+			toggleButton(toolBtn,true);
 			TweenNano.to(toolSubMenu, 0.5, { x:sW * 0.08, ease:Strong.easeOut } );
 			
 			//activeSubMenu = toolSubMenu;
@@ -166,7 +174,9 @@
 		{
 			if (layerSubMenu && layerSubMenu.y>=0) 
 			{
+				toggleButton(layerBtn,false);
 				TweenNano.to(layerSubMenu, 1, { y:-layerSubMenu.height, ease:Strong.easeOut} );return;
+				
 				//if (activeSubMenu == layerSubMenu && activeSubMenu.y >= sH * 0.08) return;
 			}
 			
@@ -183,7 +193,33 @@
 				layerSubMenu.update();
 			}
 			
+			toggleButton(layerBtn,true);
+			
 			TweenNano.to(layerSubMenu, 0.5, { y:0, ease:Strong.easeOut } );
+		}
+		
+		private function createPanZoomMenu(e:MouseEvent):void
+		{
+			if(panZoomMenu == null)
+			{
+				panZoomMenu = new PanZoom();
+				panZoomMenu.x = sW*0.75;
+				panZoomMenu.y = sH*0.5;
+			}
+			
+			if(panZoomMenu.stage)
+			{
+				removeChild(panZoomMenu);
+				toggleButton(panZoomBtn,false);
+			
+			}
+			else
+			{
+				addChild(panZoomMenu);
+				toggleButton(panZoomBtn,true);
+			
+			}
+			
 		}
 		
 		private function createColorMenu(e:MouseEvent):void 
@@ -206,6 +242,38 @@
 			TweenNano.to(colorSubMenu, 0.5, { y:sH * 0.082, ease:Strong.easeOut } );
 			
 			activeSubMenu = colorSubMenu;
+		}
+		
+		private function toggleButton(btn:Sprite,onState:Boolean):void
+		{
+			var bgColor:uint;
+			var lineColor:uint;
+			var iconColor:uint;
+			
+			if(onState)
+			{
+				bgColor = CustomUI.color1;
+				lineColor = CustomUI.color2;
+				iconColor = CustomUI.color2;
+			}
+			else
+			{
+				bgColor = CustomUI.backColor;
+				lineColor = CustomUI.color2;
+				iconColor = CustomUI.color1;
+			}
+			
+			var icon:Sprite = btn.getChildAt(0) as Sprite;
+			
+			btn.graphics.clear();
+			
+			btn.graphics.lineStyle(sW*0.0034,lineColor); btn.graphics.beginFill(bgColor); 
+			btn.graphics.drawRect(0, 0, sW*0.08, sH/6); btn.graphics.endFill();
+			
+			var cT:ColorTransform = new ColorTransform;
+			cT.color = iconColor;
+			
+			icon.transform.colorTransform = cT;
 		}
 		
 		private function performUndo(e:MouseEvent):void 
@@ -279,13 +347,14 @@
 		
 		private function updateMenus(event:MouseEvent):void
 		{
-			if (activeSubMenu is ColorSubmenu)
-			{
-				colorSubMenu.updateColorArray();
-			}
-			else if(toolSubMenu && toolSubMenu.x>=0)
+			if(toolSubMenu && toolSubMenu.x>=0)
 			{
 				toolSubMenu.update(event.type);
+			}
+			
+			if (layerSubMenu && layerSubMenu.y>=0 && event.type == MouseEvent.CLICK)
+			{
+				layerSubMenu.update();
 			}
 		}
 		

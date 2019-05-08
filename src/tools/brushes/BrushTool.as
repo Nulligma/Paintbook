@@ -341,9 +341,15 @@
 					brushBitData =  brush.scaleVector[scatSize];
 					halfSize = scatSize * 0.5;
 				}
+				/*else if (brush.pressureSensivity != 0)
+				{
+					scatSize = int(brush.scalingFactor * pressureDist);
+					brushBitData =  brush.scaleVector[scatSize];
+					halfSize = scatSize * 0.5;
+				}*/
 				if (randomRotate)
 				{
-					brushBitData =  brush.rotationVector[int(Math.random() * brush.rotationVector.length - 1)];
+					brushBitData = brush.rotationVector[int(Math.random() * brush.rotationVector.length - 1)];
 				}
 				if (randomColor)
 				{
@@ -352,7 +358,6 @@
 					brushBitData.colorTransform(brushBitData.rect, colorTrans);
 				}
 				holderData.copyPixels(brushBitData, brushBitData.rect, new Point(X-halfSize, Y-halfSize), null, null, true);
-				
 			}
 			
 			if (spacing > 1)

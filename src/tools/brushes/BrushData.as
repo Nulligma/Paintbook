@@ -151,7 +151,7 @@
 				}
 				_rotationVector = new Vector.<BitmapData>;
 				var bdR:BitmapData;
-				for (var j:int = 0; j <= 180; j+=4)
+				for (var j:int = 0; j <= 180; j+=30)
 				{
 					bdR = new BitmapData(_size*1.5, _size*1.5, true, 0x000000);
 					_pattern.x = _pattern.y = 0;

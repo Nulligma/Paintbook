@@ -512,7 +512,7 @@
 				break;
 				
 				case "PS":
-					customSlider = new CustomSlider("Pressure sensitivity ", brush.pressureSensivity, 0, 3, psArray);
+					customSlider = new CustomSlider("Pressure simulation ", brush.pressureSensivity, 0, 3, psArray);
 				break;
 				
 			}

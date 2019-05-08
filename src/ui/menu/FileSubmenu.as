@@ -44,6 +44,8 @@
 		
 		private var _parent:Menu;
 		
+		private var removedMagGlass:Boolean;
+		
 		public function FileSubmenu() 
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
@@ -52,6 +54,13 @@
 		private function onAdded(e:Event):void 
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAdded);
+			
+			if(ToolManager.activeTools.indexOf(ToolType.MAG_GLASS) != -1)
+			{
+				ToolManager.toggle(ToolType.MAG_GLASS);
+				removedMagGlass = true;
+			}
+			
 			
 			sW = System.stageWidth;
 			sH = System.stageHeight;
@@ -93,7 +102,7 @@
 					case 6:
 						sp2 = new PasteIcon; typeTxt.text = "PASTE";	 	break;
 					case 7:
-						sp2 = new ResetIcon; typeTxt.text = "RESET";		break;
+						sp2 = new PanZoomIcon; typeTxt.text = "RESET";		break;
 					case 8:
 						sp2 = new CloseIcon; typeTxt.text = "CLOSE";		break;
 				}
@@ -139,6 +148,12 @@
 			sp.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void
 			{
 				dispatchEvent(new Event(Event.COMPLETE,true));
+				
+				if(removedMagGlass)
+				{
+					ToolManager.toggle(ToolType.MAG_GLASS);
+				}
+			
 			});
 			addChild(sp);
 			
@@ -151,6 +166,11 @@
 			var type:String = e.currentTarget.name as String;
 			
 			dispatchEvent(new Event(Event.COMPLETE,true));
+			
+			if(removedMagGlass)
+			{
+				ToolManager.toggle(ToolType.MAG_GLASS);
+			}
 			
 			switch(type)
 			{

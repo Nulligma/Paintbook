@@ -425,6 +425,8 @@
 			e.currentTarget.addChild(checkBox);
 			
 			setBrushData(Preset.currentFolder[index]);
+			
+			dispatchEvent(new Event(Event.CHANGE,true));
 		}
 		
 		private function setBrushData(array:Array):void 

@@ -30,7 +30,7 @@
 										new Array("Default","Brush", "Art", 0, 35, 0.3, 0, 0, 1, 1, false, false, false, false, false),
 										new Array("Default","Pressure Brush", "Art", 0, 50, 0.3, 0, 2, 1, 1, false, false, false, false, false),
 										new Array("Default","Pencil", "Art", 0, 8, 0.4, 0, 2, 1, 0.9, false, false, false, false, false),
-										new Array("Default","Air Brush", "Art", 2, 60, 0.09, 0, 0, 0, 1, false, false, false, false, false),
+										new Array("Default","Air Brush", "Art", 4, 60, 0.5, 0, 0, 8, 1, false, false, false, false, false),
 										new Array("Default","Air Brush-2", "Art", 2, 80, 0.09, 0, 0, 12, 1, false, false, false, false, false),
 										new Array("Default","Pen", "Art", 0, 4, 1, 2, 0, 1, 1, false, false, false, false, false),
 										new Array("Default","Marker", "Calligraphy", 9, 30, 0.1, 0, 0, 1, 0.75, false, false, false, false, false)

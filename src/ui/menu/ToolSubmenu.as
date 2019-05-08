@@ -131,6 +131,7 @@
 				presets = new PresetInterface();
 				presets.x = sW*0.32;
 				presets.y = sW*0.2;
+				presets.addEventListener(Event.CHANGE,updateSize);
 				this.addChild(presets);
 			}
 			
@@ -443,6 +444,16 @@
 			//(parent as Menu).deactivateTweenOut();
 		}
 		
+		private function updateSize(e:Event):void
+		{
+			if(customSlider && customSlider.stage)
+			{
+				removeChild(customSlider);
+				customSlider = null;
+				changeSize(null);
+			}
+		}
+		
 		private function terminateDrag(e:MouseEvent):void 
 		{
 			ToolManager.currentToolProp.size = customSlider.value;
@@ -464,6 +475,7 @@
 				presets = new PresetInterface();
 				presets.x = sW*0.32;
 				presets.y = sW*0.2;
+				presets.addEventListener(Event.CHANGE,updateSize);
 				this.addChild(presets);
 			}
 			
