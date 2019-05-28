@@ -1,4 +1,4 @@
-package tools 
+﻿package tools 
 {
 	/**
 	 * ...
@@ -42,6 +42,29 @@ package tools
 		static public function get selectionTools():Array 
 		{
 			return _selectionTools;
+		}
+		
+		static public function getToolNumber(ToolName:String):int
+		{
+			switch(ToolName){
+					case "BlurTool":	return ToolType.BLUR;
+					case "EraseTool":	return ToolType.ERASER;
+					case "SprayPaint":	return ToolType.SPRAY;
+					case "BrushTool":	return ToolType.BRUSH;
+					case "FreeTrans":	return ToolType.TRANSFORM;
+					case "SmudgeTool":	return ToolType.SMUDGE;
+					case "BucketTool":	return ToolType.BUCKET;
+					case "ShapeTool":	return ToolType.SHAPE;
+					case "MoveLayer":	return ToolType.SCROLL;
+					case "ClipTool":	return ToolType.CLIP;
+					case "MagGlass":	return ToolType.MAG_GLASS;
+					case "ColorPicker":	return ToolType.PICKER;
+					case "CurveTool":	return ToolType.LINE;
+					case "TextTool":	return ToolType.TEXT;
+					case "LassoTool":	return ToolType.LASSO;
+				}
+				
+				return -1;
 		}
 		
 	}

@@ -101,7 +101,8 @@
 			oldY = _canvas.mouseY;
 			
 			oldPd = pressureDist = 0.2;// brush.size * 0.25 * 0.085;
-			psCount = (brush.pressureSensivity)*0.08;
+			//psCount = (brush.pressureSensivity)*0.08;
+			psCount = (brush.pressureSensivity) * 0.3;
 			
 			initBrushProp();
 			
@@ -157,7 +158,7 @@
 			newDrawPoint = new Point(oldX + (_canvas.mouseX - oldX) * easing, oldY + (_canvas.mouseY - oldY) * easing);
 			
 			if(brush.pressureSensivity != 0)
-				calcPressure(newDrawPoint);
+				betterCaclcPressure(newDrawPoint);
 			
 			efla(oldX, oldY, newDrawPoint.x, newDrawPoint.y, 0);
 				
@@ -174,12 +175,22 @@
 			oldY = newDrawPoint.y;
 		}
 		
+		private function betterCaclcPressure(newDrawPoint:Point):void
+		{
+			pressureDist = Math.sqrt(distanceSquared(newDrawPoint, new Point(oldX, oldY)));
+			pressureDist = pressureDist < 2?2:pressureDist>18?18:pressureDist;
+			pressureDist *= 0.085;
+			pressureDist < 1?pressureDist *= (1 - psCount):pressureDist *= (1 + psCount);
+			pressureDist = oldPd + (pressureDist - oldPd) * easingForPressure;
+			oldPd = pressureDist;
+		}
+		
 		private function calcPressure(newDrawPoint:Point):void 
 		{
-			//pressureDist = distanceSquared(newDrawPoint, new Point(oldX, oldY));
-			pressureDist = (newDrawPoint.x - oldX) + (newDrawPoint.y - oldY) 
-			pressureDist = pressureDist < 1?1:pressureDist>20?20:pressureDist;
-			pressureDist *= psCount;
+			pressureDist = distanceSquared(newDrawPoint, new Point(oldX, oldY));
+			//pressureDist = uint(newDrawPoint.x - oldX) + uint(newDrawPoint.y - oldY) 
+			pressureDist = pressureDist < 4?4:pressureDist>300?300:pressureDist;
+			pressureDist *= psCount*psCount;
 			//pressureDist < 1?pressureDist *= (1 - psCount):pressureDist *= (1 + psCount);
 			pressureDist = oldPd + (pressureDist - oldPd) * easingForPressure;
 			
@@ -302,7 +313,7 @@
 		
 		private function draw(X:int, Y:int, pointIndex:int):void
 		{
-			if (scattering && randomRotate)
+			/*if (scattering && randomRotate)
 			{
 				pattern.scaleX = pattern.scaleY = brush.scalingFactor * Math.random();
 				pattern.rotation = int(Math.random() * 180);
@@ -315,8 +326,8 @@
 				pattern.x = X;
 				pattern.y = Y;
 				holderData.draw(pattern, pattern.transform.matrix, pattern.transform.colorTransform);
-			}
-			else if (brush.pressureSensivity != 0)
+			}*
+			if (brush.pressureSensivity != 0)
 			{
 				pattern.scaleX = pattern.scaleY = brush.scalingFactor * pressureDist;
 				if (randomRotate)
@@ -332,33 +343,44 @@
 				holderData.draw(pattern, pattern.transform.matrix, pattern.transform.colorTransform);
 			}
 			else
-			{
+			{*/
 				brushBitData = brush.brushBitData;
 				
-				if (scattering)
+				
+				if (brush.pressureSensivity != 0)
 				{
-					scatSize = int(Math.random()*brush.scaleVector.length-1)
-					brushBitData =  brush.scaleVector[scatSize];
+					scatSize = int(brush.size * brush.scalingFactor * pressureDist)+1;
+					if(randomRotate)
+						brushBitData = brush.bitVector[scatSize][int(Math.random() * BrushData.TOTAL_ROTATION)];
+					else
+						brushBitData = brush.bitVector[scatSize][0];
 					halfSize = scatSize * 0.5;
 				}
-				/*else if (brush.pressureSensivity != 0)
+				else
 				{
-					scatSize = int(brush.scalingFactor * pressureDist);
-					brushBitData =  brush.scaleVector[scatSize];
-					halfSize = scatSize * 0.5;
-				}*/
-				if (randomRotate)
-				{
-					brushBitData = brush.rotationVector[int(Math.random() * brush.rotationVector.length - 1)];
+					if (scattering)
+					{
+						//scatSize = int(Math.random()*brush.scaleVector.length-1)
+						scatSize = int(Math.random()*brush.size)+1;
+						brushBitData =  brush.bitVector[scatSize][0];
+						halfSize = scatSize * 0.5;
+					}
+					if (randomRotate)
+					{
+						brushBitData = brush.bitVector[brush.size][int(Math.random() * BrushData.TOTAL_ROTATION)];
+					}
 				}
+				
 				if (randomColor)
 				{
 					colorTrans.color = Math.random() * 0xFFFFFF;
 					colorTrans.alphaMultiplier = 1;
 					brushBitData.colorTransform(brushBitData.rect, colorTrans);
 				}
+				
+				halfSize = brushBitData.width*0.5;
 				holderData.copyPixels(brushBitData, brushBitData.rect, new Point(X-halfSize, Y-halfSize), null, null, true);
-			}
+			//}
 			
 			if (spacing > 1)
 				lastDrawnPoints[pointIndex] = new Point(X, Y);
@@ -392,7 +414,8 @@
 		public function customDown(startPoint:Point):void
 		{
 			oldPd = pressureDist = 0.2;// brush.size * 0.25 * 0.085;
-			psCount = (brush.pressureSensivity)*0.08;
+			//psCount = (brush.pressureSensivity)*0.08;
+			psCount = (brush.pressureSensivity) * 0.3;
 			
 			initBrushProp();
 			
@@ -412,7 +435,7 @@
 			newDrawPoint = new Point(oldX + (newPoint.x - oldX) * 1, oldY + (newPoint.y - oldY) * 1);
 			
 			if(brush.pressureSensivity != 0)
-				calcPressure(newDrawPoint);
+				betterCaclcPressure(newDrawPoint);
 			
 			efla(oldX, oldY, newDrawPoint.x, newDrawPoint.y, 0);
 			

@@ -1,4 +1,4 @@
-package ui.other 
+﻿package ui.other 
 {
 	import com.greensock.easing.Strong;
 	import com.greensock.TweenLite;
@@ -10,6 +10,8 @@ package ui.other
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import settings.CustomUI;
+	import settings.System;
+
 	/**
 	 * ...
 	 * @author GrafixGames

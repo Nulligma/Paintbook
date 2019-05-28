@@ -9,6 +9,7 @@
 	import tools.ToolType;
 	
 	import tools.ToolManager;
+	import flash.display.Bitmap;
 	
 	/**
 	 * ...
@@ -39,12 +40,18 @@
 		private var _blur:BlurFilter;
 		private var _filterManager:FiltersManager;
 		
+		private var _bitVector:Vector.<Vector.<BitmapData>>;
+		
 		private var _scaleVector:Vector.<BitmapData>;
 		private var _rotationVector:Vector.<BitmapData>;
 		private var _brushBitData:BitmapData;
 		private var _scalingFactor:Number;
 		
 		private var colorTrans:ColorTransform;
+		
+		static public const MAX_SIZE:int = 200;
+		static public const ROTATION_INTV:int = 45;
+		static public const TOTAL_ROTATION:int = 360/ROTATION_INTV;
 		
 		public function BrushData() 
 		{
@@ -56,6 +63,17 @@
 		{
 			_size = 35; _flow = 0.3; _smoothness = 0; _alpha = 1; _spacing = 1;
 			_randomRotate = false; _scattering = false; _randomColor = false; _xSymmetry = false; _ySymmetry = false;
+			
+			
+			_bitVector = new Vector.<Vector.<BitmapData>>(MAX_SIZE+1,true);
+			for(var i:int = 1;i<=MAX_SIZE;i++)
+			{
+				_bitVector[i] = new Vector.<BitmapData>(TOTAL_ROTATION,true);
+				for(var j:int = 0;j<TOTAL_ROTATION;j++)
+				{
+					_bitVector[i][j] = new BitmapData(Math.ceil(i*1.5),Math.ceil(i*1.5),true,0x00000000);
+				}
+			}
 			
 			_type = "Art"; _brushIndex = 0;
 			
@@ -116,7 +134,27 @@
 			
 			_pattern.x = _pattern.y = 0;
 			
-			if (_scattering && !_randomRotate)
+			var bitData:BitmapData;
+			if(_scattering || _randomRotate)
+			{
+				for(var k:int = 1;k<=MAX_SIZE;k++)
+				{
+					for(var l:int = 0;l<TOTAL_ROTATION;l++)
+					{
+						bitData = _bitVector[k][l];
+						
+						bitData.fillRect(bitData.rect,0x00000000);
+						_pattern.x = _pattern.y = 0;
+						_pattern.width = _pattern.height = k;
+						_pattern.rotation = l*ROTATION_INTV;
+						_pattern.x = _pattern.y = bitData.width/2;
+						
+						bitData.draw(_pattern,_pattern.transform.matrix,_pattern.transform.colorTransform);
+					}
+				}
+			}
+			
+			/*if (_scattering && !_randomRotate)
 			{
 				if (_scaleVector)
 				{
@@ -161,7 +199,7 @@
 					
 					_rotationVector.push(bdR);
 				}
-			}
+			}*/
 			
 			_pattern.x = _pattern.y = 0;
 			_size = tempSize;
@@ -337,6 +375,11 @@
 		public function get scalingFactor():Number 
 		{
 			return _scalingFactor;
+		}
+		
+		public function get bitVector():Vector.<Vector.<BitmapData>> 
+		{
+			return _bitVector;
 		}
 		
 		public function get scaleVector():Vector.<BitmapData> 

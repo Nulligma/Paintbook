@@ -68,9 +68,9 @@
 			
 			sp1 = new Sprite;
 			sp1.graphics.lineStyle(sW*0.001, CustomUI.color1); sp1.graphics.beginFill(CustomUI.color2); 
-			sp1.graphics.drawRect(0,0,sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+			sp1.graphics.drawRect(0,0,sW * 0.2, sH * 0.1); sp1.graphics.endFill();
 			
-			sp2 = new PlusIcon;
+			sp2 = new MoreIcon;
 			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
 			cT = new ColorTransform;
 			cT.color = CustomUI.color1;
@@ -86,8 +86,8 @@
 			spectrum.y = 1;
 			spectrumHolder.addChild(spectrum);
 			spectrumHolder.graphics.lineStyle(sW * 0.001, CustomUI.color1);
-			spectrumHolder.graphics.drawRect(0,0,spectrumHolder.width,sH * 0.207);
-			spectrumHolder.x = (6 * sW * 0.1);
+			spectrumHolder.graphics.drawRect(0,0,spectrumHolder.width,spectrumHolder.height);
+			spectrumHolder.y = (6 * sH * 0.1);
 			addChild(spectrumHolder);
 			spectrumHolder.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { pressed = true; collectColor()} );
 			spectrumHolder.addEventListener(MouseEvent.MOUSE_MOVE, collectColor);
@@ -99,10 +99,10 @@
 			{
 				sp1 = new Sprite;
 				sp1.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp1.graphics.beginFill(color); 
-				sp1.graphics.drawRect(0, 0, sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+				sp1.graphics.drawRect(0, 0, sW * 0.2, sH * 0.1); sp1.graphics.endFill();
 				sp1.name = String(i);
 				
-				sp1.x = (i * sW * 0.1) + sW * 0.1;
+				sp1.y = (i * sH * 0.1) + sH * 0.1;
 				addChild(sp1);
 				i++;
 				sp1.addEventListener(MouseEvent.CLICK, setColor);
@@ -115,19 +115,20 @@
 			//addChild(sp1);
 			
 			c1Sprite = new Sprite;
-			c1Sprite.graphics.beginFill(ToolManager.fillColor); c1Sprite.graphics.drawRect(0, 0, sW/2, sH * 0.04);
-			//c1Sprite.x = sp1.x + sW * 0.002;
-			c1Sprite.y = sH*0.207;
+			c1Sprite.graphics.beginFill(ToolManager.fillColor); c1Sprite.graphics.drawRect(0, 0, sW*0.02, sH * 0.5);
+			c1Sprite.x = sW * 0.2;
+			//c1Sprite.y = sH*0.207;
 			addChild(c1Sprite);
 			
 			c2Sprite = new Sprite;
-			c2Sprite.graphics.beginFill(ToolManager.fillColor); c2Sprite.graphics.drawRect(0, 0, sW/2, sH * 0.04); c2Sprite.graphics.endFill();
-			c2Sprite.x = sW/2;
-			c2Sprite.y = sH*0.207;
+			c2Sprite.graphics.beginFill(ToolManager.fillColor); c2Sprite.graphics.drawRect(0, 0, sW*0.02, sH * 0.5); c2Sprite.graphics.endFill();
+			c2Sprite.x = sW * 0.2;
+			c2Sprite.y = sH*0.5;
 			addChild(c2Sprite);
 			
 			graphics.lineStyle(sW * 0.006, CustomUI.color1); 
-			graphics.moveTo(0, sH * 0.247); graphics.lineTo(sW, sH * 0.247);
+			graphics.moveTo(sW*0.22, 0); graphics.lineTo(sW*0.22, sH);
+			graphics.moveTo(0, 0); graphics.lineTo(0, sH);
 		}
 		
 		private function setColor(e:MouseEvent=null):void 
@@ -135,7 +136,8 @@
 			if (e != null)
 			{
 				ToolManager.fillColor = colorsArray[int(e.currentTarget.name)];
-				c2Sprite.graphics.beginFill(ToolManager.fillColor); c2Sprite.graphics.drawRect(0, 0, c2Sprite.width, sH * 0.04);
+				c2Sprite.graphics.clear();
+				c2Sprite.graphics.beginFill(ToolManager.fillColor); c2Sprite.graphics.drawRect(0, 0, sW*0.02, sH * 0.5);
 				c2Sprite.graphics.endFill();
 			}
 			else
@@ -153,7 +155,8 @@
 			{
 				var color:uint = uint("0x" + spectrum.bitmapData.getPixel(spectrum.mouseX, spectrum.mouseY).toString(16));
 				ToolManager.fillColor = color;
-				c2Sprite.graphics.beginFill(ToolManager.fillColor); c2Sprite.graphics.drawRect(0, 0, c2Sprite.width, sH * 0.04);
+				c2Sprite.graphics.clear();
+				c2Sprite.graphics.beginFill(ToolManager.fillColor); c2Sprite.graphics.drawRect(0, 0, sW*0.02, sH * 0.5);
 				c2Sprite.graphics.endFill();
 			}
 		}
@@ -171,12 +174,12 @@
 					sp1 = colorsSprites[i] as Sprite;
 					sp1.graphics.clear();
 					sp1.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp1.graphics.beginFill(colorsArray[i]); 
-					sp1.graphics.drawRect(0, 0, sW * 0.1, sH * 0.207); sp1.graphics.endFill();
+					sp1.graphics.drawRect(0, 0, sW * 0.2, sH * 0.1); sp1.graphics.endFill();
 				}
-				
-				c1Sprite.graphics.beginFill(ToolManager.fillColor); c1Sprite.graphics.drawRect(0, 0, c1Sprite.width, sH * 0.04);
-				c1Sprite.graphics.endFill();
 			}
+				c1Sprite.graphics.clear();
+				c1Sprite.graphics.beginFill(ToolManager.fillColor); c1Sprite.graphics.drawRect(0, 0, sW*0.02, sH * 0.5);
+				c1Sprite.graphics.endFill();
 		}
 		
 		private function onRemoved(e:Event):void 

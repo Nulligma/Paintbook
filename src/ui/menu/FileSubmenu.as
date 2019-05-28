@@ -26,6 +26,7 @@
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.ui.Mouse;
+	import ui.other.DrawGrid;
 
 	/**
 	 * ...
@@ -39,6 +40,7 @@
 		private var tween:TweenNano;
 		private var tempStage:Stage;
 		private var saveAsUI:SaveAs;
+		private var gridUI:DrawGrid;
 		private var taskLoader:TaskLoader;
 		private var cT:ColorTransform;
 		
@@ -61,7 +63,6 @@
 				removedMagGlass = true;
 			}
 			
-			
 			sW = System.stageWidth;
 			sH = System.stageHeight;
 			
@@ -76,7 +77,7 @@
 			txtFormat.size = sH * 0.083 * 0.4;
 			var typeTxt:TextField;
 			
-			for (var i:int = 0; i <= 8; i++)
+			for (var i:int = 0; i <= 9; i++)
 			{
 				sp = new Sprite;
 				sp.graphics.lineStyle(sW * 0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
@@ -104,6 +105,8 @@
 					case 7:
 						sp2 = new PanZoomIcon; typeTxt.text = "RESET";		break;
 					case 8:
+						sp2 = new GridIcon; typeTxt.text = "GRID";			break;
+					case 9:
 						sp2 = new CloseIcon; typeTxt.text = "CLOSE";		break;
 				}
 				
@@ -117,7 +120,7 @@
 				
 				typeTxt.selectable = false;
 				typeTxt.autoSize = TextFieldAutoSize.CENTER;
-				typeTxt.x = sp.width / 2 - typeTxt.width / 2; typeTxt.y = sp2.y + typeTxt.height;
+				typeTxt.x = sp.width / 2 - typeTxt.width / 2; typeTxt.y = sp.height - typeTxt.height*1.2;
 				sp.addChild(typeTxt);
 				
 				sp.x = ((sW/5) * int(i%5)) + sp.width/2; 
@@ -207,6 +210,10 @@
 				break;
 				
 				case "8" :
+					gridMenu(); 
+				break;
+				
+				case "9" :
 					closeMenu(); 
 				break;
 			}
@@ -234,6 +241,19 @@
 			{
 				LayerList.instance.currentLayer.fillRect(LayerList.instance.currentLayer.rect, 0x00000000);
 			}
+		}
+		
+		private function gridMenu():void
+		{
+			gridUI = new DrawGrid(onGridRetrun);
+			
+			BackBoard.instance.addChild(gridUI);
+			tempStage = stage;
+		}
+		
+		private function onGridRetrun():void 
+		{
+			tween = new TweenNano(gridUI, 0.5, { y: -gridUI.height, ease:Linear.easeIn, onComplete:function():void { BackBoard.instance.removeChild(gridUI); } } );
 		}
 		
 		private function saveAsMenu():void 

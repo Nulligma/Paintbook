@@ -20,7 +20,7 @@
 		private var _heading:String;
 		private var _message:String;
 		private var _exitHandler:Function;
-		private var _type:String;
+		private var _type:uint;
 		private var _fileName:String;
 		
 		private var nameTxt:TextField;
@@ -29,8 +29,11 @@
 		private var sH:int;
 		private var txtFormat:TextFormat;
 		
+		public static const MENU_TYPE:uint = 1;
+		public static const CANVAS_TYPE:uint = 2;
+		public static const IMAGE_TYPE:uint = 2;
 		
-		public function SaveMessage(type:String,exitHandler:Function,heading:String = null, message:String=null, fileName:String = null) 
+		public function SaveMessage(type:uint,exitHandler:Function,heading:String = null, message:String=null, fileName:String = null) 
 		{
 			_type = type;
 			_exitHandler = exitHandler;
@@ -139,7 +142,7 @@
 			txtFormat.size = sH * 0.083 * 0.6;
 			textField = new TextField;textField.embedFonts = true;
 			textField.defaultTextFormat = txtFormat;
-			textField.text = "File Name";
+			textField.text = (_type==CANVAS_TYPE||_type==IMAGE_TYPE)?"File Name":"Preset Name";
 			textField.selectable = false;
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			textField.x = sW*0.029; textField.y = sp.height / 2 - textField.height / 2;

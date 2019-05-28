@@ -115,7 +115,7 @@
 			txtFormat.color = CustomUI.color1;
 			
 			detailsTxt = new TextField();detailsTxt.embedFonts = true;
-			txtFormat.size = height * 0.083;
+			txtFormat.size = height * 0.07;
 			detailsTxt.defaultTextFormat = txtFormat;
 			if (_dataArray != null)
 			{
@@ -177,6 +177,14 @@
 		private final function addListeners():void
 		{
 			head.addEventListener(MouseEvent.MOUSE_DOWN, initDrag);
+			//this.addEventListener(MouseEvent.MOUSE_UP, stopdrag);
+		}
+		
+		private function stopdrag(e:MouseEvent):void
+		{
+			head.stopDrag();
+			removeEventListener(MouseEvent.MOUSE_MOVE, onSliderMove);
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onSliderMove);
 		}
 		
 		private final function initDrag(e:MouseEvent):void

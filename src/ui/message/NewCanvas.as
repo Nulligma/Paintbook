@@ -79,6 +79,8 @@
 			sW = System.stageWidth;
 			sH = System.stageHeight;
 			
+			maxVal = sW>sH?sW*1.5:sH*1.5;
+			
 			canvasWidth = sW;
 			canvasHeight = sH;
 			

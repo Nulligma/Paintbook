@@ -1,4 +1,4 @@
-package tools.bucket 
+﻿package tools.bucket 
 {
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
@@ -8,6 +8,8 @@ package tools.bucket
 	import flash.geom.Rectangle;
 	import layers.history.HistoryManager;
 	import tools.ToolManager;
+	import ui.other.DrawGrid;
+
 	/**
 	 * ...
 	 * @author GrafixGames
@@ -40,6 +42,26 @@ package tools.bucket
 		private function onClick(e:MouseEvent):void 
 		{
 			clipRect = ToolManager.clipRect;
+			
+			if(DrawGrid.area && ToolManager.grid.visible && DrawGrid.area.contains(_canvas.mouseX, _canvas.mouseY))
+			{
+				var aX:Number = _canvas.mouseX - DrawGrid.area.x;
+				var bX:uint = aX/DrawGrid.cell.width;
+				
+				var cX:uint = DrawGrid.cell.width * bX;
+				var dX:Number = DrawGrid.area.x + cX;
+				
+				var aY:Number = _canvas.mouseY - DrawGrid.area.y;
+				var bY:uint = aY/DrawGrid.cell.height;
+				
+				var cY:uint = DrawGrid.cell.height * bY;
+				var dY:Number = DrawGrid.area.y + cY;
+				
+				DrawGrid.cell.x = dX;
+				DrawGrid.cell.y = dY;
+				
+				clipRect = DrawGrid.cell;
+			}
 			
 			HistoryManager.pushList();
 			

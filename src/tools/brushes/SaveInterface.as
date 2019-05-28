@@ -286,7 +286,7 @@
 			sp.addEventListener(MouseEvent.CLICK, changeName);
 			oldHolder.addChild(sp);
 			
-			textField = new TextField;
+			textField = new TextField;textField.embedFonts = true;
 			txtFormat.size = sH * 0.083 * 0.8;
 			txtFormat.color = CustomUI.color2;
 			textField.defaultTextFormat = txtFormat;

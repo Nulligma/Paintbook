@@ -492,7 +492,7 @@
 			switch(e.currentTarget.name)
 			{
 				case "Size":
-					customSlider = new CustomSlider("Brush Size", brush.size, 1, 200);
+					customSlider = new CustomSlider("Brush Size", brush.size, 1, BrushData.MAX_SIZE);
 				break;
 				
 				case "Flow":

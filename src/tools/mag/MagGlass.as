@@ -9,6 +9,8 @@
 	import flash.geom.Rectangle;
 	import settings.CustomUI;
 	import settings.System;
+	import ui.other.MenuSettings;
+
 	/**
 	 * ...
 	 * @author GrafixGames
@@ -60,7 +62,7 @@
 			
 			//prevY = prevY == 0?sH - width:prevY;
 			
-			prevX = sW*0.4;
+			prevX = MenuSettings.ON_LEFT?sW*0.4:sW*0.4;
 			
 			x = prevX;
 			y = prevY;
@@ -71,7 +73,7 @@
 		private function drag(e:MouseEvent):void 
 		{
 			stage.addEventListener(MouseEvent.MOUSE_UP, endDrag);
-			startDrag(false, new Rectangle(sW*0.4,0, System.stageWidth - width-sW*0.4, System.stageHeight - height));
+			startDrag(false, new Rectangle(0,0, System.stageWidth - width, System.stageHeight - height));
 		}
 		
 		private function endDrag(e:MouseEvent):void 

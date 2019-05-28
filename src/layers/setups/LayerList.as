@@ -1,4 +1,4 @@
-package layers.setups
+﻿package layers.setups
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -186,6 +186,18 @@ package layers.setups
 			}
 			
 			return layerObject
+		}
+		
+		public function getLength():int
+		{
+			var length:int = 0;
+			var layerObject:Object = this.tailObject();
+			while (layerObject != null)
+			{
+				length++;
+				layerObject = layerObject.front;
+			}
+			return length;
 		}
 		
 		public function set currentLayerObject(s:Object):void

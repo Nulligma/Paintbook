@@ -29,6 +29,8 @@
 	import colors.convertor.ConvertColor;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
+	import tools.brushes.BrushData;
+	import ui.other.MenuSettings;
 
 	/**
 	 * ...
@@ -97,7 +99,8 @@
 			txtFormat = new TextFormat;
 			txtFormat.font = CustomUI.font;
 			
-			graphics.beginFill(CustomUI.color2); graphics.drawRect(0, 0, sW*0.32, sH); graphics.endFill();
+			var bX:Number = MenuSettings.ON_LEFT?0:sW*0.2;
+			graphics.beginFill(CustomUI.color2); graphics.drawRect(bX, 0,sW*0.32, sH); graphics.endFill();
 			
 			toolHolder = new Sprite();
 			
@@ -114,7 +117,7 @@
 				else
 					drawIconOn(sp1, false);
 				
-				sp1.x = (sW * 0.08 * int(i%4));
+				sp1.x = (sW * 0.08 * int(i%4)); if(!MenuSettings.ON_LEFT) sp1.x += sW*0.2;
 				sp1.y = sH*0.1 * int(i/4);
 				toolHolder.addChild(sp1);
 				sp1.addEventListener(MouseEvent.CLICK, changeTool);
@@ -129,7 +132,7 @@
 			if(ToolManager.activeTools.indexOf(ToolType.BRUSH) != -1 && presets == null)
 			{
 				presets = new PresetInterface();
-				presets.x = sW*0.32;
+				presets.x = MenuSettings.ON_LEFT?sW*0.32:0;
 				presets.y = sW*0.2;
 				presets.addEventListener(Event.CHANGE,updateSize);
 				this.addChild(presets);
@@ -148,6 +151,7 @@
 			sp2.x = settingIcon.width / 2;
 			sp2.y = settingIcon.height / 2;
 			settingIcon.addChild(sp2);
+			if(!MenuSettings.ON_LEFT) settingIcon.x = sW*0.2;
 			settingIcon.y = sH*0.4;
 			addChild(settingIcon);
 			settingIcon.addEventListener(MouseEvent.CLICK, createToolSetting);
@@ -166,6 +170,7 @@
 			sp1.addChild(typeTxt);
 			addChild(sp1);
 			sp1.x = sW * 0.16;
+			if(!MenuSettings.ON_LEFT) sp1.x+=sW*0.2;
 			sp1.y = sH*0.4;
 			sp1.addEventListener(MouseEvent.CLICK, changeSize);
 			
@@ -173,6 +178,7 @@
 			settingsCover.graphics.lineStyle(sW * 0.001, CustomUI.color1);
 			settingsCover.graphics.beginFill(CustomUI.color2);
 			settingsCover.graphics.drawRect(0, 0, sW*0.32, sH * 0.1);
+			if(!MenuSettings.ON_LEFT) settingsCover.x = sW*0.2;
 			settingsCover.y = sH*0.4;
 			settingsCover.graphics.endFill();
 			
@@ -200,6 +206,7 @@
 				colorsSprites.push(sp1);
 			}
 			
+			if(!MenuSettings.ON_LEFT) colorsHolder.x = sW*0.2;
 			colorsHolder.y = sH*0.5;
 			//addChild(colorsHolder);
 			
@@ -210,18 +217,21 @@
 			spectrum.x = sW*0.32 - spectrum.width;
 			spectrum.y = sH*0.5;
 			spectrumHolder.addChild(spectrum);
+			if(!MenuSettings.ON_LEFT) spectrumHolder.x = sW*0.2;
 			
 			addChild(spectrumHolder);
 			
 			c1Sprite = new Sprite;
 			c1Sprite.graphics.beginFill(ToolManager.fillColor); c1Sprite.graphics.drawRect(0, 0, sW*0.08, sH * 0.1);
 			c1Sprite.x = c1Sprite.width*2;
+			if(!MenuSettings.ON_LEFT) c1Sprite.x += sW*0.2;
 			c1Sprite.y = sH-c1Sprite.height;
 			addChild(c1Sprite);
 			
 			c2Sprite = new Sprite;
 			c2Sprite.graphics.beginFill(ToolManager.fillColor); c2Sprite.graphics.drawRect(0, 0, sW*0.08, sH * 0.1); c2Sprite.graphics.endFill();
 			c2Sprite.x = c2Sprite.width*3;
+			if(!MenuSettings.ON_LEFT) c2Sprite.x += sW*0.2;
 			c2Sprite.y = sH-c2Sprite.height;
 			addChild(c2Sprite);
 			
@@ -236,6 +246,7 @@
 			sp2.x = sp1.width / 2;
 			sp2.y = sp1.height / 2;
 			sp1.addChild(sp2);
+			if(!MenuSettings.ON_LEFT) sp1.x = sW*0.2;
 			sp1.y = sH-sp1.height;
 			addChild(sp1);
 			sp1.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void { colorSetup = new ColorSetup(ToolManager.fillColor, setColor); BackBoard.instance.addChild(colorSetup);} );
@@ -252,6 +263,7 @@
 			sp2.y = sp1.height / 2;
 			sp1.addChild(sp2);
 			sp1.x=sp1.width;
+			if(!MenuSettings.ON_LEFT) sp1.x += sW*0.2;
 			sp1.y = sH-sp1.height;
 			addChild(sp1);
 			sp1.addEventListener(MouseEvent.CLICK,changeColorSelector);
@@ -269,6 +281,7 @@
 			sp2.y = sp1.height / 2;
 			sp1.addChild(sp2);
 			sp1.x=sp1.width;
+			if(!MenuSettings.ON_LEFT) sp1.x += sW*0.2;
 			sp1.y = sH-sp1.height;
 			//addChild(sp1);
 			sp1.addEventListener(MouseEvent.CLICK,changeColorSelector);
@@ -435,8 +448,9 @@
 		
 		private function changeSize(e:MouseEvent):void 
 		{
-			customSlider = new CustomSlider("Size", ToolManager.currentToolProp.size, 1, 200,null,sW*0.32,sH*0.5,0,true);
+			customSlider = new CustomSlider("Size", ToolManager.currentToolProp.size, 1, BrushData.MAX_SIZE,null,sW*0.32,sH*0.5,0,true);
 			this.addChild(customSlider);
+			if(!MenuSettings.ON_LEFT) customSlider.x = sW*0.2;
 			customSlider.addEventListener(MouseEvent.MOUSE_UP, terminateDrag);
 			customSlider.closeBtn.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void{
 				removeChild(customSlider);
@@ -470,19 +484,14 @@
 			
 			ToolManager.toggle(toolNumber);
 			
-			if(ToolManager.activeTools.indexOf(ToolType.BRUSH) != -1 && presets == null)
+			if(ToolManager.activeTools.indexOf(ToolType.BRUSH) != -1 && presets != null)
 			{
-				presets = new PresetInterface();
-				presets.x = sW*0.32;
-				presets.y = sW*0.2;
-				presets.addEventListener(Event.CHANGE,updateSize);
-				this.addChild(presets);
+				presets.visible = true;
 			}
 			
 			if(ToolManager.activeTools.indexOf(ToolType.BRUSH) == -1 && presets != null)
 			{
-				this.removeChild(presets);
-				presets = null;
+				presets.visible = false;
 			}
 			
 			settingIcon.removeChild(settingIcon.getChildAt(0));

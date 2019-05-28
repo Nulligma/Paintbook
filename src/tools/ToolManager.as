@@ -61,6 +61,8 @@
 		static private var _lassoMask:Sprite;
 		static private var _inverseMask:BitmapData;
 		
+		static public var grid:Sprite;
+		
 		public function ToolManager() 
 		{
 			

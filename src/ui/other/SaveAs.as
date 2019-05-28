@@ -220,7 +220,7 @@
 		
 		private function onE(e:Event):void
 		{
-			var sm:SaveMessage = new SaveMessage("Image",onEncoded,"Image file","Image files will be saved under PaintBook_Images folder");
+			var sm:SaveMessage = new SaveMessage(SaveMessage.IMAGE_TYPE,onEncoded,"Image file","Image files will be saved under PaintBook_Images folder");
 			addChild(sm);
 		}
 		

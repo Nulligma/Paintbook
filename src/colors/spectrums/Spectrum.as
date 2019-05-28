@@ -33,14 +33,14 @@
 			_radialSpectrum.polar(sW * 0.068, sW * 0.068);
 			
 			var bm:ColorSpectrumChart = new ColorSpectrumChart;
-			bm.linear(sW * 0.3, sH * 0.207, true);
+			bm.linear(sW * 0.2, sH * 0.3, true);
 			
 			_linearSpectrum = new Bitmap;
-			_linearSpectrum.bitmapData = new BitmapData(sW * 0.4, sH * 0.207, false);
+			_linearSpectrum.bitmapData = new BitmapData(sW * 0.2, sH * 0.4, false);
 			_linearSpectrum.bitmapData.copyPixels(bm.bitmapData, bm.bitmapData.rect, new Point(0, 0));
 			
-			_linearSpectrum.bitmapData.fillRect(new Rectangle(sW * 0.3, 0, sW * 0.05, sH * 0.207), 0x000000);
-			_linearSpectrum.bitmapData.fillRect(new Rectangle(sW * 0.35, 0, sW * 0.05, sH * 0.207), 0xFFFFFF);
+			_linearSpectrum.bitmapData.fillRect(new Rectangle(0, sH*0.3, sW * 0.2, sH * 0.05), 0x000000);
+			_linearSpectrum.bitmapData.fillRect(new Rectangle(0, sH*0.35, sW * 0.2, sH * 0.05), 0xFFFFFF);
 		}
 		
 		static public function get radialSpectrum():ColorSpectrumChart 

@@ -89,6 +89,9 @@
 		private var settingsUI:SettingsUI;
 		private var currentPressed:Sprite;
 		
+		private var shopUI:ShopUI;
+		private var menuUI:MenuSettings;
+		
 		private var openBtnsHolder:Sprite;
 		private var openIndex:int;
 		
@@ -225,6 +228,21 @@
 			sp = new Sprite;
 			sp.graphics.lineStyle(sW*0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
 			sp.graphics.drawRect(-sH * 0.0417,-sH * 0.0417,sH * 0.083, sH * 0.083); sp.graphics.endFill();
+			sp2 = new shopIcon;
+			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
+			cT = new ColorTransform;
+			cT.color = CustomUI.color1;
+			sp2.transform.colorTransform = cT;
+			sp.addChild(sp2);
+			sp.x = sW - sp.width*3/2 - sW * 0.02;
+			sp.y = sH * 0.01667 + sp.height / 2;
+			buttonGroup.addChild(sp);
+			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
+			sp.addEventListener(MouseEvent.MOUSE_UP, onShop);
+			
+			sp = new Sprite;
+			sp.graphics.lineStyle(sW*0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
+			sp.graphics.drawRect(-sH * 0.0417,-sH * 0.0417,sH * 0.083, sH * 0.083); sp.graphics.endFill();
 			sp2 = new PlusIcon;
 			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
 			cT = new ColorTransform;
@@ -236,6 +254,21 @@
 			buttonGroup.addChild(sp);
 			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
 			sp.addEventListener(MouseEvent.MOUSE_UP, onNewCanvas);
+			
+			sp = new Sprite;
+			sp.graphics.lineStyle(sW*0.001, CustomUI.color1); sp.graphics.beginFill(CustomUI.color2); 
+			sp.graphics.drawRect(-sH * 0.088,-sH * 0.0417,sH * 0.176, sH * 0.083); sp.graphics.endFill();
+			sp2 = new menuIcon;
+			sp2.scaleX = sp2.scaleY = (sH * 0.083 / 50);
+			cT = new ColorTransform;
+			cT.color = CustomUI.color1;
+			sp2.transform.colorTransform = cT;
+			sp.addChild(sp2);
+			sp.x = sW - sp.width/2 - sW * 0.01;
+			sp.y = sH -  sH * 0.033 - sp.height / 2;
+			buttonGroup.addChild(sp);
+			sp.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void { e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97; currentPressed = e.currentTarget as Sprite;} );
+			sp.addEventListener(MouseEvent.MOUSE_UP, onMenu);
 			
 			deleteBtn = new Sprite;
 			deleteBtn.graphics.lineStyle(sW*0.001, CustomUI.color1); deleteBtn.graphics.beginFill(CustomUI.color2); 
@@ -268,7 +301,6 @@
 			}
 			currentCanvasSP = spriteList[0] as Sprite;
 			byteArray = null;
-			
 			
 			stage.addEventListener(MouseEvent.MOUSE_UP, stagePress);
 		}
@@ -462,7 +494,7 @@
 		{
 			currentPressed.scaleX = currentPressed.scaleY = 1;
 			
-			sm = new SaveMessage("Canvas",nameSelected,"Canvas Rack","Canvases will be saved under PaintBook_Saves folder in a *.rack file","Untitled_rack");
+			sm = new SaveMessage(SaveMessage.CANVAS_TYPE,nameSelected,"Canvas Rack","Canvases will be saved under PaintBook_Saves folder in a *.rack file","Untitled_rack");
 			addChild(sm);
 		}
 		
@@ -517,6 +549,30 @@
 				currentPressed.scaleX = currentPressed.scaleY = 1;
 				currentPressed = null;
 			}
+		}
+		
+		private function onShop(e:MouseEvent):void
+		{
+			shopUI = new ShopUI(onShopReturn);
+			
+			addChild(shopUI);
+		}
+		
+		private function onShopReturn():void 
+		{
+			tween = new TweenNano(shopUI, 0.5, { y: -shopUI.height, ease:Linear.easeIn, onComplete:function():void { removeChild(shopUI); } } );
+		}
+		
+		private function onMenu(e:MouseEvent):void 
+		{
+			menuUI = new MenuSettings(onMenuRetrun);
+			
+			addChild(menuUI);
+		}
+		
+		private function onMenuRetrun():void 
+		{
+			tween = new TweenNano(menuUI, 0.5, { y: -menuUI.height, ease:Linear.easeIn, onComplete:function():void { removeChild(menuUI); } } );
 		}
 		
 		private function onSettings(e:MouseEvent):void 
@@ -920,7 +976,7 @@
 			{
 				child = buttonGroup.getChildAt(i);
 				child.graphics.lineStyle(sW*0.001, CustomUI.color1); child.graphics.beginFill(CustomUI.color2); 
-				child.graphics.drawRect( -sH * 0.0417, -sH * 0.0417, sH * 0.083, sH * 0.083); child.graphics.endFill();
+				child.graphics.drawRect( -child.width/2, -child.height/2, child.width, child.height); child.graphics.endFill();
 				child = child.getChildAt(0);
 				cT = new ColorTransform;
 				cT.color = CustomUI.color1;

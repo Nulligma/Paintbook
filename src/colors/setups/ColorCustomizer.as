@@ -182,10 +182,10 @@
 			e.currentTarget.scaleX = e.currentTarget.scaleY = 0.97;
 			pressedSwatch = e.currentTarget as MovieClip;
 			
-			if (_type.indexOf("Custom") !=-1)
-			{
+			/*if (_type.indexOf("Custom") !=-1)
+			{ 
 				timer.start();
-			}
+			}*/
 			
 			stage.addEventListener(MouseEvent.MOUSE_UP, swatchUP);
 		}
